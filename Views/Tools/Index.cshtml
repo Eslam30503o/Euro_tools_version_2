@@ -1,0 +1,37 @@
+@model IEnumerable<WarehouseApp.Models.Item>
+
+@{
+    ViewData["Title"] = "Tools List";
+}
+
+<h1>Tools List</h1>
+
+<a href="@Url.Action("Index", "AddItem")" class="btn btn-primary mb-3">Add New Tool</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Diameter</th>
+            <th>Length</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tool in Model)
+        {
+            <tr>
+                <td>@tool.ItemCode</td>
+                <td>@tool.ItemName</td>
+                <td>@tool.Category?.CategoryName</td>
+                <td>@tool.ToolAttribute?.Diameter</td>
+                <td>@tool.ToolAttribute?.Length</td>
+                <td>
+                    <a href="@Url.Action("Index", "ToolDetails", new { id = tool.ItemID })">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,428 @@
+﻿@{
+    ViewData["Title"] = "الرئيسية";
+}
+
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <i class="fas fa-warehouse hero-icon mb-4"></i>
+                        <h1 class="display-3 fw-bold mb-3">نظام إدارة المخازن</h1>
+                        <p class="lead fs-4 mb-4">منصة شاملة لإدارة الأدوات والمنتجات بكفاءة وسهولة</p>
+                        <div class="hero-stats row mt-5">
+                            <div class="col-md-4">
+                                <div class="stat-item">
+                                    <h3 class="stat-number">500+</h3>
+                                    <p class="stat-label">منتج مُدار</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-item">
+                                    <h3 class="stat-number">50+</h3>
+                                    <p class="stat-label">مستخدم نشط</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-item">
+                                    <h3 class="stat-number">99%</h3>
+                                    <p class="stat-label">دقة المخزون</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">الوظائف الرئيسية</h2>
+                <p class="section-subtitle">اختر من الخدمات المتاحة لإدارة مخزنك بفعالية</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- إدارة الأدوات -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-boxes feature-icon"></i>
+                        <h4>إدارة الأدوات</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">عرض وإدارة جميع الأدوات والمنتجات في المخزن</p>
+                        <div class="button-group">
+                            <a class="btn btn-primary" asp-controller="Items" asp-action="Index">
+                                <i class="fas fa-eye me-2"></i>عرض كل الأدوات
+                            </a>
+                            <a class="btn btn-success mt-2" asp-controller="AddItem" asp-action="Index">
+                                <i class="fas fa-plus me-2"></i>إضافة أداة جديدة
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إدارة التصنيفات -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-tags feature-icon"></i>
+                        <h4>إدارة التصنيفات</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">تنظيم وإدارة تصنيفات المنتجات لسهولة البحث</p>
+                        <div class="button-group">
+                            <a class="btn btn-warning" asp-controller="Categories" asp-action="Index">
+                                <i class="fas fa-list me-2"></i>إدارة التصنيفات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- السجلات والمعاملات -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-history feature-icon"></i>
+                        <h4>السجلات والمعاملات</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">متابعة جميع العمليات والمعاملات التي تمت</p>
+                        <div class="button-group">
+                            <a class="btn btn-secondary" asp-controller="Transactions" asp-action="Index">
+                                <i class="fas fa-clipboard-list me-2"></i>عرض السجلات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إدارة المستخدمين -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h4>إدارة المستخدمين</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">إدارة المستخدمين وصلاحياتهم في النظام</p>
+                        <div class="button-group">
+                            <a class="btn btn-info" asp-controller="Users" asp-action="Index">
+                                <i class="fas fa-users-cog me-2"></i>إدارة المستخدمين
+                            </a>
+                            <a class="btn btn-primary mt-2" asp-controller="User" asp-action="AddUser">
+                                <i class="fas fa-user-plus me-2"></i>إضافة مستخدم جديد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تفاصيل الأدوات -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-search feature-icon"></i>
+                        <h4>تفاصيل الأدوات</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">عرض التفاصيل الكاملة لأي أداة في المخزن</p>
+                        <div class="button-group">
+                            <a class="btn btn-dark" asp-controller="ToolDetails" asp-action="All" asp-route-id="1">
+                                <i class="fas fa-info-circle me-2"></i>تفاصيل أداة
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التقارير -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-header-custom">
+                        <i class="fas fa-chart-bar feature-icon"></i>
+                        <h4>التقارير والإحصائيات</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">عرض تقارير شاملة عن حالة المخزن والمبيعات</p>
+                        <div class="button-group">
+                            <a class="btn btn-success" href="#">
+                                <i class="fas fa-chart-line me-2"></i>عرض التقارير
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="quick-actions-card">
+                    <h3 class="text-center mb-4">الإجراءات السريعة</h3>
+                    <div class="row text-center">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a class="quick-action-btn" asp-controller="AddItem" asp-action="Index">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>إضافة منتج</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a class="quick-action-btn" asp-controller="Items" asp-action="Search">
+                                <i class="fas fa-search"></i>
+                                <span>البحث</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a class="quick-action-btn" asp-controller="Reports" asp-action="LowStock">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>مخزون منخفض</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a class="quick-action-btn" asp-controller="Backup" asp-action="Index">
+                                <i class="fas fa-download"></i>
+                                <span>نسخ احتياطي</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-section mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="footer-text mb-0">
+                        جميع الحقوق محفوظة &copy; 2025 - نظام إدارة المخازن
+                        <i class="fas fa-heart text-danger mx-2" aria-hidden="true"></i>
+                        <a href="URL_لصفحة_المصمم" class="text-decoration-none text-white">Design by Eng / Eslam Gamal</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 0 0 50px 50px;
+    }
+
+    .hero-icon {
+        font-size: 4rem;
+        opacity: 0.9;
+    }
+
+    .stat-item {
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #ffd700;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+    }
+
+    /* Sections */
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .card-header-custom {
+        background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        padding: 2rem 1.5rem 1rem;
+        text-align: center;
+        border-bottom: none;
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .card-header-custom h4 {
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .button-group .btn {
+        width: 100%;
+        font-weight: 500;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .button-group .btn:hover {
+            transform: scale(1.05);
+        }
+
+    /* Quick Actions */
+    .quick-actions-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .quick-action-btn {
+        display: block;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 15px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+        .quick-action-btn:hover {
+            color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+        }
+
+        .quick-action-btn i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-action-btn span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+    /* Footer */
+    .footer-section {
+        background: #333;
+        color: white;
+    }
+
+    .footer-text {
+        font-size: 1rem;
+        opacity: 0.8;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .hero-icon {
+            font-size: 3rem;
+        }
+
+        .display-3 {
+            font-size: 2.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+    }
+
+    /* Animation */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .feature-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .feature-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .feature-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+</style>

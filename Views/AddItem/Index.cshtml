@@ -1,0 +1,524 @@
+﻿@model WarehouseApp.Models.Item
+@{
+    ViewData["Title"] = "Add New Item";
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-5 text-primary mb-1">
+                        <i class="fas fa-plus-circle me-3"></i>Add New Item
+                    </h1>
+                    <p class="text-muted mb-0">Create a new item in your warehouse inventory</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="fas fa-home me-2"></i>Home
+                    </a>
+                    <a asp-controller="Items" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Items
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["Success"] != null)
+    {
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Main Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-box me-2"></i>Item Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Index" method="post" id="addItemForm" novalidate>
+                        <div class="row">
+                            <!-- Item Code -->
+                            <div class="col-md-6 mb-3">
+                                <label for="ItemCode" class="form-label fw-semibold">
+                                    <i class="fas fa-barcode me-1 text-primary"></i>Item Code
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-hashtag"></i>
+                                    </span>
+                                    <input asp-for="ItemCode" type="text" class="form-control"
+                                           placeholder="Enter unique item code" required />
+                                </div>
+                                <span asp-validation-for="ItemCode" class="text-danger small"></span>
+                                <div class="form-text">Must be unique identifier for the item</div>
+                            </div>
+
+                            <!-- Item Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="ItemName" class="form-label fw-semibold">
+                                    <i class="fas fa-tag me-1 text-primary"></i>Item Name
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-box"></i>
+                                    </span>
+                                    <input asp-for="ItemName" type="text" class="form-control"
+                                           placeholder="Enter item name" required />
+                                </div>
+                                <span asp-validation-for="ItemName" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="Description" class="form-label fw-semibold">
+                                <i class="fas fa-align-left me-1 text-primary"></i>Description
+                            </label>
+                            <textarea asp-for="Description" class="form-control" rows="3"
+                                      placeholder="Enter item description (optional)"></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                            <div class="form-text">Provide detailed description of the item</div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Category -->
+                            <div class="col-md-6 mb-3">
+                                <label for="CategoryID" class="form-label fw-semibold">
+                                    <i class="fas fa-folder me-1 text-primary"></i>Category
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-list"></i>
+                                    </span>
+                                    <select asp-for="CategoryID" class="form-select">
+                                        <option value="" selected>Select Category</option>
+                                        @if (ViewBag.Categories != null)
+                                        {
+                                            foreach (var category in ViewBag.Categories)
+                                            {
+                                        <option value="@category.CategoryID">@category.CategoryName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <span asp-validation-for="CategoryID" class="text-danger small"></span>
+                                @if (ViewBag.Categories == null || !((IEnumerable<dynamic>)ViewBag.Categories).Any())
+                                {
+                                <div class="form-text text-warning">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    No categories available. <a href="/Categories/Create">Create one first</a>
+                                </div>
+                                }
+                            </div>
+
+                            <!-- Unit -->
+                            <div class="col-md-6 mb-3">
+                                <label for="Unit" class="form-label fw-semibold">
+                                    <i class="fas fa-ruler me-1 text-primary"></i>Unit
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </span>
+                                    <input asp-for="Unit" type="text" class="form-control"
+                                           placeholder="e.g., pcs, kg, liter" required list="unitSuggestions" />
+                                </div>
+                                <datalist id="unitSuggestions">
+                                    <option value="pcs">Pieces</option>
+                                    <option value="kg">Kilograms</option>
+                                    <option value="g">Grams</option>
+                                    <option value="liter">Liters</option>
+                                    <option value="ml">Milliliters</option>
+                                    <option value="box">Boxes</option>
+                                    <option value="set">Sets</option>
+                                </datalist>
+                                <span asp-validation-for="Unit" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Reorder Level -->
+                            <div class="col-md-6 mb-3">
+                                <label for="ReorderLevel" class="form-label fw-semibold">
+                                    <i class="fas fa-exclamation-triangle me-1 text-warning"></i>Reorder Level
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-bell"></i>
+                                    </span>
+                                    <input asp-for="ReorderLevel" type="number" class="form-control"
+                                           placeholder="Minimum stock level" min="0" required />
+                                </div>
+                                <span asp-validation-for="ReorderLevel" class="text-danger small"></span>
+                                <div class="form-text">Alert when stock falls below this level</div>
+                            </div>
+
+                            <!-- Current Stock -->
+                            <div class="col-md-6 mb-3">
+                                <label for="CurrentStock" class="form-label fw-semibold">
+                                    <i class="fas fa-cubes me-1 text-success"></i>Current Stock
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-warehouse"></i>
+                                    </span>
+                                    <input asp-for="CurrentStock" type="number" class="form-control"
+                                           placeholder="Initial stock quantity" min="0" required />
+                                </div>
+                                <span asp-validation-for="CurrentStock" class="text-danger small"></span>
+                                <div class="form-text">Current available quantity</div>
+                            </div>
+                        </div>
+
+                        <!-- Stock Level Indicator -->
+                        <div class="mb-4">
+                            <div class="card bg-light">
+                                <div class="card-body py-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <strong>Stock Status Preview:</strong>
+                                        <span id="stockStatus" class="badge bg-secondary ms-2">Enter stock values</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                <i class="fas fa-undo me-2"></i>Reset Form
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Add Item
+                                <span class="spinner-border spinner-border-sm ms-2 d-none" id="submitSpinner"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Info Card -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Tips for Adding Items
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <i class="fas fa-barcode text-primary me-3 mt-1"></i>
+                                <div>
+                                    <h6>Item Code</h6>
+                                    <small class="text-muted">Use a unique, descriptive code that follows your naming convention</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <i class="fas fa-exclamation-triangle text-warning me-3 mt-1"></i>
+                                <div>
+                                    <h6>Reorder Level</h6>
+                                    <small class="text-muted">Set this based on your usage patterns and supplier lead times</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <i class="fas fa-folder text-info me-3 mt-1"></i>
+                                <div>
+                                    <h6>Categories</h6>
+                                    <small class="text-muted">Organize items into categories for better inventory management</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 0.75rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-header {
+        border-radius: 0.75rem 0.75rem 0 0 !important;
+        border: none;
+    }
+
+    .form-label {
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+        color: #6c757d;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+        }
+
+    .alert {
+        border-radius: 0.75rem;
+        border: none;
+    }
+
+    .display-5 {
+        font-weight: 300;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.5em 0.75em;
+    }
+
+    @@media (max-width: 768px) {
+        .display-5 {
+            font-size: 2rem;
+        }
+
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .d-flex.justify-content-end {
+            flex-direction: column;
+        }
+    }
+
+    /* Custom validation styles */
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-control.is-valid,
+    .form-select.is-valid {
+        border-color: #198754;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('addItemForm');
+        const currentStockInput = document.getElementById('CurrentStock');
+        const reorderLevelInput = document.getElementById('ReorderLevel');
+        const stockStatus = document.getElementById('stockStatus');
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const spinner = document.getElementById('submitSpinner');
+
+        // Real-time stock status update
+        function updateStockStatus() {
+            const currentStock = parseInt(currentStockInput.value) || 0;
+            const reorderLevel = parseInt(reorderLevelInput.value) || 0;
+
+            if (currentStock === 0 && reorderLevel === 0) {
+                stockStatus.textContent = 'Enter stock values';
+                stockStatus.className = 'badge bg-secondary ms-2';
+                return;
+            }
+
+            if (currentStock <= reorderLevel) {
+                stockStatus.textContent = 'Low Stock Alert';
+                stockStatus.className = 'badge bg-danger ms-2';
+            } else if (currentStock <= reorderLevel * 2) {
+                stockStatus.textContent = 'Medium Stock';
+                stockStatus.className = 'badge bg-warning ms-2';
+            } else {
+                stockStatus.textContent = 'Good Stock Level';
+                stockStatus.className = 'badge bg-success ms-2';
+            }
+        }
+
+        // Event listeners for real-time updates
+        currentStockInput.addEventListener('input', updateStockStatus);
+        reorderLevelInput.addEventListener('input', updateStockStatus);
+
+        // Form validation
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (validateForm()) {
+                showSubmitSpinner();
+                // Submit the form
+                this.submit();
+            }
+        });
+
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+
+            // Custom validations
+            const itemCode = document.getElementById('ItemCode');
+            if (itemCode.value.length < 2) {
+                itemCode.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            const currentStock = parseInt(currentStockInput.value);
+            const reorderLevel = parseInt(reorderLevelInput.value);
+
+            if (currentStock < 0) {
+                currentStockInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (reorderLevel < 0) {
+                reorderLevelInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showSubmitSpinner() {
+            spinner.classList.remove('d-none');
+            submitBtn.disabled = true;
+        }
+
+        // Auto-generate item code suggestion
+        const itemNameInput = document.getElementById('ItemName');
+        const itemCodeInput = document.getElementById('ItemCode');
+
+        itemNameInput.addEventListener('input', function() {
+            if (!itemCodeInput.value) {
+                const suggestion = generateItemCodeSuggestion(this.value);
+                itemCodeInput.placeholder = `Suggestion: ${suggestion}`;
+            }
+        });
+
+        function generateItemCodeSuggestion(itemName) {
+            if (!itemName) return 'Enter unique item code';
+
+            const words = itemName.trim().split(' ');
+            let suggestion = '';
+
+            if (words.length === 1) {
+                suggestion = words[0].substring(0, 4).toUpperCase();
+            } else {
+                suggestion = words.map(word => word.charAt(0)).join('').toUpperCase();
+            }
+
+            suggestion += Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return suggestion;
+        }
+
+        // Item code format validation
+        itemCodeInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+    });
+
+    function resetForm() {
+        if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+            document.getElementById('addItemForm').reset();
+            document.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+            });
+            document.getElementById('stockStatus').textContent = 'Enter stock values';
+            document.getElementById('stockStatus').className = 'badge bg-secondary ms-2';
+        }
+    }
+
+    // Auto-save to localStorage (optional)
+    function autoSave() {
+        const formData = new FormData(document.getElementById('addItemForm'));
+        const data = Object.fromEntries(formData);
+        localStorage.setItem('addItemFormData', JSON.stringify(data));
+    }
+
+    // Load saved data on page load
+    function loadSavedData() {
+        const saved = localStorage.getItem('addItemFormData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => {
+                const field = document.getElementById(key);
+                if (field && data[key]) {
+                    field.value = data[key];
+                }
+            });
+        }
+    }
+
+    // Clear saved data on successful submit
+    window.addEventListener('beforeunload', function() {
+        const form = document.getElementById('addItemForm');
+        if (form && !form.querySelector('.spinner-border:not(.d-none)')) {
+            autoSave();
+        }
+    });
+</script>

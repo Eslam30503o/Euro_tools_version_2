@@ -1,0 +1,526 @@
+@model WarehouseApp.Models.Item
+@{
+    ViewData["Title"] = "Tool Details";
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-5 text-primary mb-1">
+                        <i class="fas fa-tools me-3"></i>Tool Details
+                    </h1>
+                    <p class="text-muted mb-0">Comprehensive information about @Model.ItemName</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="fas fa-home me-2"></i>Home
+                    </a>
+                    <a asp-controller="Tools" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Tools
+                    </a>
+                    <a asp-controller="Tool" asp-action="Edit" asp-route-id="@Model.ItemID" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Edit Tool
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Information Card -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-wrench me-2"></i>@Model.ItemName
+                        @{
+                            var stockClass = Model.CurrentStock < 10 ? "bg-danger" :
+                                           Model.CurrentStock < 50 ? "bg-warning" : "bg-success";
+                        }
+                        <span class="badge @stockClass ms-3">@Model.CurrentStock @Model.Unit</span>
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Basic Information -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-info-circle me-2"></i>Basic Information
+                            </h5>
+                            <div class="info-group">
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-barcode text-primary me-2"></i>Item Code
+                                    </label>
+                                    <div class="info-value">
+                                        <span class="badge bg-secondary fs-6">@Model.ItemCode</span>
+                                    </div>
+                                </div>
+
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-folder text-primary me-2"></i>Category
+                                    </label>
+                                    <div class="info-value">
+                                        @if (Model.Category != null)
+                                        {
+                                        <span class="badge bg-primary">@Model.Category.CategoryName</span>
+                                        }
+                                        else
+                                        {
+                                        <span class="badge bg-light text-dark">Uncategorized</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-align-left text-primary me-2"></i>Description
+                                    </label>
+                                    <div class="info-value">
+                                        <p class="text-muted mb-0">
+                                            @(string.IsNullOrEmpty(Model.Description) ? "No description available" : Model.Description)
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-balance-scale text-primary me-2"></i>Unit
+                                    </label>
+                                    <div class="info-value">
+                                        <span class="badge bg-info">@Model.Unit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stock Information -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-warehouse me-2"></i>Stock Information
+                            </h5>
+                            <div class="info-group">
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-cubes text-success me-2"></i>Current Stock
+                                    </label>
+                                    <div class="info-value">
+                                        <h4 class="mb-0">
+                                            <span class="badge @stockClass">
+                                                @Model.CurrentStock @Model.Unit
+                                                @if (Model.CurrentStock < 10)
+                                                {
+                                                <i class="fas fa-exclamation-triangle ms-1"></i>
+                                                }
+                                            </span>
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-bell text-warning me-2"></i>Reorder Level
+                                    </label>
+                                    <div class="info-value">
+                                        <span class="badge bg-warning text-dark">@Model.ReorderLevel @Model.Unit</span>
+                                    </div>
+                                </div>
+
+                                <div class="info-item mb-3">
+                                    <label class="info-label">
+                                        <i class="fas fa-chart-line text-info me-2"></i>Stock Status
+                                    </label>
+                                    <div class="info-value">
+                                        @if (Model.CurrentStock <= Model.ReorderLevel)
+                                        {
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>Low Stock Alert
+                                        </span>
+                                        }
+                                        else if (Model.CurrentStock <= Model.ReorderLevel * 2)
+                                        {
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-exclamation me-1"></i>Medium Stock
+                                        </span>
+                                        }
+                                        else
+                                        {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Good Stock Level
+                                        </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool Specifications Card -->
+            @if (Model.ToolAttribute != null)
+            {
+           <div class="card shadow border-0">
+               <div class="card-header bg-info text-white">
+                   <h5 class="card-title mb-0">
+                       <i class="fas fa-cogs me-2"></i>Technical Specifications
+                   </h5>
+               </div>
+               <div class="card-body p-4">
+                   <div class="row">
+                       <div class="col-md-6 mb-3">
+                           <div class="spec-item">
+                               <label class="spec-label">
+                                   <i class="fas fa-circle text-info me-2"></i>Diameter
+                               </label>
+                               <div class="spec-value">
+                                   @if (Model.ToolAttribute.Diameter.HasValue)
+                        {
+                                   <span class="badge bg-light text-dark fs-6">@Model.ToolAttribute.Diameter</span>
+                        }
+                        else
+                        {
+                                   <span class="text-muted">Not specified</span>
+                        }
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="col-md-6 mb-3">
+                           <div class="spec-item">
+                               <label class="spec-label">
+                                   <i class="fas fa-ruler text-info me-2"></i>Length
+                               </label>
+                               <div class="spec-value">
+                                   @if (Model.ToolAttribute.Length.HasValue)
+                        {
+                                   <span class="badge bg-light text-dark fs-6">@Model.ToolAttribute.Length</span>
+                        }
+                        else
+                        {
+                                   <span class="text-muted">Not specified</span>
+                        }
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="col-md-6 mb-3">
+                           <div class="spec-item">
+                               <label class="spec-label">
+                                   <i class="fas fa-hammer text-info me-2"></i>Hardness
+                               </label>
+                               <div class="spec-value">
+                                   @if (Model.ToolAttribute.Hardness.HasValue)
+                        {
+                                   <span class="badge bg-warning text-dark fs-6">@Model.ToolAttribute.Hardness</span>
+                        }
+                        else
+                        {
+                                   <span class="text-muted">Not specified</span>
+                        }
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="col-md-6 mb-3">
+                           <div class="spec-item">
+                               <label class="spec-label">
+                                   <i class="fas fa-layer-group text-info me-2"></i>Material Type
+                               </label>
+                               <div class="spec-value">
+                                   @if (!string.IsNullOrEmpty(Model.ToolAttribute.MaterialType))
+                        {
+                                   <span class="badge bg-success fs-6">@Model.ToolAttribute.MaterialType</span>
+                        }
+                        else
+                        {
+                                   <span class="text-muted">Not specified</span>
+                        }
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="col-12 mb-3">
+                           <div class="spec-item">
+                               <label class="spec-label">
+                                   <i class="fas fa-globe text-info me-2"></i>Origin
+                               </label>
+                               <div class="spec-value">
+                                   @if (!string.IsNullOrEmpty(Model.ToolAttribute.LocalOrImported))
+                        {
+                                   @if (Model.ToolAttribute.LocalOrImported.ToLower().Contains("local"))
+                            {
+                                   <span class="badge bg-primary fs-6">
+                                       <i class="fas fa-map-marker-alt me-1"></i>@Model.ToolAttribute.LocalOrImported
+                                   </span>
+                            }
+                            else
+                            {
+                                   <span class="badge bg-secondary fs-6">
+                                       <i class="fas fa-plane me-1"></i>@Model.ToolAttribute.LocalOrImported
+                                   </span>
+                            }
+                        }
+                        else
+                        {
+                                   <span class="text-muted">Not specified</span>
+                        }
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+            }
+            else
+            {
+            <div class="card border-warning">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-exclamation-triangle text-warning fa-3x mb-3"></i>
+                    <h5 class="text-warning">No Technical Specifications</h5>
+                    <p class="text-muted mb-0">Technical specifications are not available for this tool.</p>
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- Quick Actions Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions Card -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-success text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Tool" asp-action="Edit" asp-route-id="@Model.ItemID"
+                           class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Edit Tool Information
+                        </a>
+                        <button type="button" class="btn btn-info" onclick="printDetails()">
+                            <i class="fas fa-print me-2"></i>Print Details
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="exportToPDF()">
+                            <i class="fas fa-file-pdf me-2"></i>Export to PDF
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="shareDetails()">
+                            <i class="fas fa-share-alt me-2"></i>Share Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Summary Card -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>Stock Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="progress mb-3" style="height: 20px;">
+                            @{
+                                var stockPercentage = Model.ReorderLevel > 0 ?
+                                    Math.Min((double)Model.CurrentStock / (Model.ReorderLevel * 3) * 100, 100) : 100;
+                                var progressColor = stockPercentage < 33 ? "bg-danger" :
+                                                   stockPercentage < 66 ? "bg-warning" : "bg-success";
+                            }
+                            <div class="progress-bar @progressColor"
+                                 style="width: @stockPercentage%">
+                                @Math.Round(stockPercentage, 1)%
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <h5 class="text-primary mb-0">@Model.CurrentStock</h5>
+                                    <small class="text-muted">Current</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-warning mb-0">@Model.ReorderLevel</h5>
+                                <small class="text-muted">Reorder Level</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool Information Summary -->
+            <div class="card shadow border-0">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info me-2"></i>Tool Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-12 mb-3">
+                            <div class="border rounded p-3">
+                                <i class="fas fa-tools fa-2x text-primary mb-2"></i>
+                                <h6 class="mb-1">Tool Type</h6>
+                                <small class="text-muted">
+                                    @(Model.Category?.CategoryName ?? "General Tool")
+                                </small>
+                            </div>
+                        </div>
+                        @if (Model.ToolAttribute != null && !string.IsNullOrEmpty(Model.ToolAttribute.MaterialType))
+                        {
+                        <div class="col-12 mb-3">
+                            <div class="border rounded p-3">
+                                <i class="fas fa-layer-group fa-2x text-success mb-2"></i>
+                                <h6 class="mb-1">Material</h6>
+                                <small class="text-muted">@Model.ToolAttribute.MaterialType</small>
+                            </div>
+                        </div>
+                        }
+                        @if (Model.ToolAttribute != null && !string.IsNullOrEmpty(Model.ToolAttribute.LocalOrImported))
+                        {
+                        <div class="col-12">
+                            <div class="border rounded p-3">
+                                <i class="fas fa-globe fa-2x text-info mb-2"></i>
+                                <h6 class="mb-1">Origin</h6>
+                                <small class="text-muted">@Model.ToolAttribute.LocalOrImported</small>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 0.75rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+    .card-header {
+        border-radius: 0.75rem 0.75rem 0 0 !important;
+        border: none;
+        font-weight: 600;
+    }
+
+    .info-item, .spec-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .info-item:last-child, .spec-item:last-child {
+            border-bottom: none;
+        }
+
+    .info-label, .spec-label {
+        font-weight: 600;
+        color: #495057;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value, .spec-value {
+        font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .progress {
+        border-radius: 10px;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+    .display-5 {
+        font-weight: 300;
+    }
+
+    @@media (max-width: 768px) {
+        .display-5 {
+            font-size: 2rem;
+        }
+
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .btn {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    @@media print {
+        .btn, .card-header {
+            display: none !important;
+        }
+
+        .card {
+            border: 1px solid #000 !important;
+            box-shadow: none !important;
+        }
+    }
+</style>
+
+<script>
+    function printDetails() {
+        window.print();
+    }
+
+    function exportToPDF() {
+        // Add your PDF export logic here
+        alert('Exporting to PDF...');
+        // Example: window.location.href = `/Tools/ExportToPDF/${@Model.ItemID}`;
+    }
+
+    function shareDetails() {
+        if (navigator.share) {
+            navigator.share({
+                title: '@Model.ItemName - Tool Details',
+                text: 'Check out this tool details: @Model.ItemName',
+                url: window.location.href
+            }).then(() => {
+                console.log('Thanks for sharing!');
+            }).catch(console.error);
+        } else {
+            // Fallback for browsers that don't support native sharing
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(() => {
+                alert('Unable to share. Please copy the URL manually.');
+            });
+        }
+    }
+
+    // Smooth scroll for mobile navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any initialization code here
+        console.log('Tool details page loaded');
+    });
+</script>
