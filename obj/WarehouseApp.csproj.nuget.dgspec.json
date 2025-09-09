@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\WarehouseApp.csproj": {}
+    "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\WarehouseApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\WarehouseApp.csproj": {
+    "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\WarehouseApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\WarehouseApp.csproj",
+        "projectUniqueName": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\WarehouseApp.csproj",
         "projectName": "WarehouseApp",
-        "projectPath": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\WarehouseApp.csproj",
+        "projectPath": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\WarehouseApp.csproj",
         "packagesPath": "C:\\Users\\euro.tr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\obj\\",
+        "outputPath": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
