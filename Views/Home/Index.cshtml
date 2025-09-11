@@ -79,7 +79,7 @@
                     <div class="card-body">
                         <p class="card-text">تنظيم وإدارة تصنيفات المنتجات لسهولة البحث</p>
                         <div class="button-group">
-                            <a class="btn btn-warning" asp-controller="Categories" asp-action="Index">
+                            <a class="btn btn-warning" asp-controller="Category" asp-action="Index">
                                 <i class="fas fa-list me-2"></i>إدارة التصنيفات
                             </a>
                         </div>
@@ -97,11 +97,15 @@
                     <div class="card-body">
                         <p class="card-text">متابعة جميع العمليات والمعاملات التي تمت</p>
                         <div class="button-group">
-                            <a class="btn btn-secondary" asp-controller="Transactions" asp-action="Index">
+                            <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Index">
                                 <i class="fas fa-clipboard-list me-2"></i>عرض السجلات
                             </a>
                         </div>
                     </div>
+                    <div class="mt-4">
+                        <a asp-controller="Inventory" asp-action="Create" class="btn btn-primary m-2">اضافه منتج </a>
+                    </div>
+
                 </div>
             </div>
 
@@ -194,6 +198,10 @@
                                 <i class="fas fa-download"></i>
                                 <span>نسخ احتياطي</span>
                             </a>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="feature-card h-100">
+                            </div>
                         </div>
                     </div>
                 </div>

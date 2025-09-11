@@ -3,6 +3,7 @@
     ViewData["Title"] = "All Items";
     }
 
+
     <div class="container-fluid">
         <div class="row mb-4">
             <div class="col-12">
@@ -545,9 +546,9 @@
             notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
             notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
             notification.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
 
             document.body.appendChild(notification);
 

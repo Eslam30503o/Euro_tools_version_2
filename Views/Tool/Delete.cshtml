@@ -1,0 +1,27 @@
+﻿@model WarehouseApp.Models.Item
+@{
+    ViewData["Title"] = "حذف الأداة";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>هل أنت متأكد من حذف هذه الأداة؟</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">كود الأداة</dt>
+        <dd class="col-sm-10">@Model.ItemCode</dd>
+
+        <dt class="col-sm-2">اسم الأداة</dt>
+        <dd class="col-sm-10">@Model.ItemName</dd>
+
+        <dt class="col-sm-2">التصنيف</dt>
+        <dd class="col-sm-10">@Model.Category?.CategoryName</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ItemID" />
+    <button type="submit" class="btn btn-danger">حذف</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>

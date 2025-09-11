@@ -1,0 +1,33 @@
+﻿@model WarehouseApp.Models.Item
+
+@{
+    ViewData["Title"] = "إضافة أداة جديدة";
+}
+
+<h2>إضافة أداة جديدة</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ItemCode" class="control-label">كود الأداة</label>
+        <input asp-for="ItemCode" class="form-control" />
+        <span asp-validation-for="ItemCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ItemName" class="control-label">اسم الأداة</label>
+        <input asp-for="ItemName" class="form-control" />
+        <span asp-validation-for="ItemName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryID" class="control-label">رقم التصنيف</label>
+        <input asp-for="CategoryID" class="form-control" />
+        <span asp-validation-for="CategoryID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-success">💾 حفظ</button>
+        <a asp-action="Index" class="btn btn-secondary">🔙 رجوع للقائمة</a>
+        <a asp-controller="Items" asp-action="Import" class="btn btn-info">📥 استيراد من ملف</a>
+    </div>
+</form>

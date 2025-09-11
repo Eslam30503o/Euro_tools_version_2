@@ -1,0 +1,61 @@
+﻿@model IEnumerable<WarehouseApp.Models.Transaction>
+
+    @{
+    ViewData["Title"] = "سجل الحركات";
+    }
+
+    <h2>سجل الحركات</h2>
+    <form method="get" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <input type="text" name="search" class="form-control" placeholder="بحث بالاسم أو الكود" value="@Context.Request.Query["search"]" />
+            </div>
+
+            <div class="col-md-2">
+                <select name="actionType" class="form-control">
+                    <option value="">كل العمليات</option>
+                    <option value="Withdraw" selected="@(Context.Request.Query["actionType"] == "Withdraw" ? "selected" : null)">سحب</option>
+                    <option value="Add" selected="@(Context.Request.Query["actionType"] == "Add" ? "selected" : null)">إضافة</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <input type="date" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
+            </div>
+
+            <div class="col-md-2">
+                <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">تصفية</button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">إعادة تعيين</a>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>المنتج</th>
+                <th>المستخدم</th>
+                <th>نوع العملية</th>
+                <th>الكمية</th>
+                <th>الوقت</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.TransactionID</td>
+                <td>@t.Item?.ItemName</td>
+                <td>@t.User?.UserName</td>
+                <td>@t.Action</td>
+                <td>@t.QuantityChange</td>
+                <td>@t.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        }
+        </tbody>
+    </table>

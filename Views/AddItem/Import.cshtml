@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Import Items";
+}
+
+<h2>استيراد الأصناف من ملف</h2>
+
+<div class="alert alert-info">
+    <strong>مهم:</strong> الملف لازم يحتوي الأعمدة التالية:
+    <ul>
+        <li><b>ItemCode</b> – كود الصنف</li>
+        <li><b>ItemName</b> – اسم الصنف</li>
+        <li><b>Description</b> – الوصف</li>
+        <li><b>CategoryName</b> – اسم التصنيف (مش CategoryID)</li>
+        <li><b>UnitName</b> – اسم وحدة القياس (مش UnitID)</li>
+        <li><b>ReorderLevel</b> – حد إعادة الطلب</li>
+        <li><b>CurrentStock</b> – المخزون الحالي</li>
+    </ul>
+    <p>⚠️ لو اسم التصنيف أو الوحدة مش موجود في النظام، هيتم إضافتهم تلقائيًا.</p>
+</div>
+
+<form asp-action="Import" asp-controller="" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label for="file">اختر ملف (CSV أو Excel):</label>
+        <input type="file" name="file" id="file" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">رفع الملف</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">رجوع</a>
+</form>
+
+@Html.ValidationSummary(false, "", new { @class = "text-danger mt-3" })
+
+@if (TempData["Success"] != null)
+{
+<div class="alert alert-success mt-3">
+    @TempData["Success"]
+</div>
+}

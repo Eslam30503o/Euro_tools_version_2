@@ -1,0 +1,60 @@
+﻿@model WarehouseApp.Models.TransactionViewModel
+
+@{
+    ViewData["Title"] = "إدارة المخزون";
+}
+
+<div class="card shadow-lg p-4 mt-5">
+    <div class="card-header bg-dark text-white text-center rounded-top">
+        <h2 class="mb-0">@ViewData["Title"]</h2>
+    </div>
+    <div class="card-body">
+        
+        <form asp-action="Create" method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="SearchString" class="form-control form-control-lg" placeholder="ابحث بالاسم أو الكود..." value="@ViewData["CurrentFilter"]" />
+                <button type="submit" class="btn btn-outline-primary btn-lg"><i class="fas fa-search"></i> بحث</button>
+            </div>
+        </form>
+        
+        <form asp-action="Create" method="post">
+            <div class="mb-4">
+                <label asp-for="ItemID" class="form-label fs-5 fw-bold text-muted">اختر المنتج (الكمية المتاحة)</label>
+                <select asp-for="ItemID" class="form-control form-control-lg" asp-items="ViewBag.Items">
+                    <option disabled selected>-- اختر منتجًا من القائمة --</option>
+                </select>
+                <span asp-validation-for="ItemID" class="text-danger mt-1 d-block"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Action" class="form-label fs-5 fw-bold text-muted">نوع العملية</label>
+                <select asp-for="Action" class="form-control form-control-lg">
+                    <option value="Add">إضافة إلى المخزون</option>
+                    <option value="Withdraw">سحب من المخزون</option>
+                </select>
+                <span asp-validation-for="Action" class="text-danger mt-1 d-block"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Quantity" class="form-label fs-5 fw-bold text-muted">الكمية</label>
+                <input asp-for="Quantity" class="form-control form-control-lg" placeholder="أدخل الكمية هنا..." />
+                <span asp-validation-for="Quantity" class="text-danger mt-1 d-block"></span>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-success btn-lg px-5 me-md-2">
+                    <i class="fas fa-check-circle me-2"></i> تنفيذ العملية
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg px-5">
+                    <i class="fas fa-times-circle me-2"></i> إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

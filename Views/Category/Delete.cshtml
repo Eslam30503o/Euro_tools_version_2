@@ -1,0 +1,491 @@
+﻿@model WarehouseApp.Models.Category
+@{
+    ViewData["Title"] = "حذف التصنيف";
+}
+
+<div class="container-fluid" dir="rtl">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-triangle fa-3x"></i>
+                        </div>
+                        <div>
+                            <h1 class="mb-0">تحذير: حذف التصنيف</h1>
+                            <p class="mb-0 opacity-75">هذا الإجراء خطير ولا يمكن التراجع عنه</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light p-3 rounded">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>الرئيسية
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index">
+                            <i class="fas fa-layer-group me-1"></i>إدارة التصنيفات
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active text-danger" aria-current="page">
+                        <i class="fas fa-trash me-1"></i>حذف: @Model.CategoryName
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <!-- Danger Zone Card -->
+            <div class="card border-danger shadow-lg">
+                <div class="card-header bg-danger text-white text-center py-4">
+                    <div class="mb-3">
+                        <i class="fas fa-skull-crossbones fa-3x"></i>
+                    </div>
+                    <h3 class="mb-1">منطقة خطر</h3>
+                    <p class="mb-0">أنت على وشك حذف تصنيف نهائياً</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Warning Message -->
+                    <div class="alert alert-danger d-flex align-items-start mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle fa-2x me-3 mt-1"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">تحذير شديد الأهمية!</h5>
+                            <p class="mb-0">هل أنت متأكد 100% أنك تريد حذف هذا التصنيف نهائياً؟</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Details -->
+                    <div class="card bg-light border-danger mb-4">
+                        <div class="card-header bg-white border-danger">
+                            <h5 class="mb-0 text-danger">
+                                <i class="fas fa-crosshairs me-2"></i>التصنيف المحدد للحذف
+                            </h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
+                                     style="width: 80px; height: 80px;">
+                                    <i class="fas fa-layer-group fa-2x text-danger"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-danger mb-2">@Model.CategoryName</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="border-end">
+                                        <h5 class="text-muted mb-0">@Model.CategoryID</h5>
+                                        <small class="text-muted">رقم التصنيف</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="text-info mb-0">0</h5>
+                                    <small class="text-muted">عناصر مرتبطة</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impact Warning -->
+                    <div class="alert alert-warning" role="alert">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-bolt me-2"></i>تأثيرات الحذف:
+                        </h6>
+                        <ul class="mb-0">
+                            <li>سيتم حذف التصنيف نهائياً من قاعدة البيانات</li>
+                            <li>جميع العناصر المرتبطة ستفقد تصنيفها</li>
+                            <li>لا يمكن استرداد البيانات بعد الحذف</li>
+                            <li>قد يؤثر على التقارير والإحصائيات</li>
+                        </ul>
+                    </div>
+
+                    <!-- Safety Check -->
+                    <div class="card border-warning mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="fas fa-shield-alt me-2"></i>فحص الأمان
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="confirmImpact">
+                                <label class="form-check-label fw-bold" for="confirmImpact">
+                                    أفهم تأثيرات حذف هذا التصنيف
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="confirmBackup">
+                                <label class="form-check-label fw-bold" for="confirmBackup">
+                                    لدي نسخة احتياطية من البيانات المهمة
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="confirmFinal">
+                                <label class="form-check-label fw-bold" for="confirmFinal">
+                                    أؤكد أنني أريد المتابعة مع العلم بالمخاطر
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Type to Confirm -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-keyboard me-2 text-danger"></i>
+                            للتأكيد، اكتب اسم التصنيف بالضبط:
+                            <span class="text-danger">@Model.CategoryName</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg"
+                               id="confirmText"
+                               placeholder="اكتب اسم التصنيف هنا..."
+                               autocomplete="off">
+                        <div class="form-text text-danger">
+                            <i class="fas fa-info-circle me-1"></i>
+                            يجب أن يطابق النص المدخل اسم التصنيف تماماً
+                        </div>
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="alert alert-info text-center" id="countdownAlert">
+                        <h5 class="mb-2">
+                            <i class="fas fa-clock me-2"></i>فترة تأمل إجبارية
+                        </h5>
+                        <p class="mb-2">يمكنك المتابعة خلال: <span id="countdown" class="fw-bold fs-4">10</span> ثانية</p>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-info" id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Form -->
+                    <form asp-action="Delete" method="post" id="deleteForm">
+                        <input type="hidden" asp-for="CategoryID" />
+
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <button type="submit"
+                                    class="btn btn-danger btn-lg px-5"
+                                    id="deleteBtn"
+                                    disabled>
+                                <i class="fas fa-skull-crossbones me-2"></i>
+                                <span class="btn-text">تأكيد الحذف النهائي</span>
+                                <div class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-success btn-lg px-4">
+                                <i class="fas fa-shield-alt me-2"></i>إلغاء وحفظ التصنيف
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-home me-1"></i>الصفحة الرئيسية
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-action="Details" asp-route-id="@Model.CategoryID" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-eye me-1"></i>عرض التفاصيل
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-action="Edit" asp-route-id="@Model.CategoryID" class="btn btn-link text-decoration-none text-warning">
+                                <i class="fas fa-edit me-1"></i>تعديل بدلاً من الحذف
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative Actions Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-success shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>بدائل أفضل
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">بدلاً من الحذف، يمكنك:</p>
+
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.CategoryID" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>تعديل التصنيف
+                        </a>
+
+                        <button class="btn btn-info" onclick="archiveCategory()">
+                            <i class="fas fa-archive me-2"></i>أرشفة التصنيف
+                        </button>
+
+                        <button class="btn btn-secondary" onclick="disableCategory()">
+                            <i class="fas fa-pause me-2"></i>تعطيل مؤقت
+                        </button>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-top">
+                        <h6 class="text-success">لماذا هذه البدائل أفضل؟</h6>
+                        <ul class="small">
+                            <li>الاحتفاظ بالبيانات التاريخية</li>
+                            <li>إمكانية الاسترداد لاحقاً</li>
+                            <li>عدم تأثير على العناصر المرتبطة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help & Support -->
+            <div class="card border-info shadow-sm mt-3">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>تحتاج مساعدة؟
+                    </h6>
+                </div>
+                <div class="card-body text-center">
+                    <p class="small mb-3">
+                        إذا كنت غير متأكد من قرار الحذف،
+                        يمكنك التواصل مع فريق الدعم
+                    </p>
+                    <button class="btn btn-info btn-sm">
+                        <i class="fas fa-headset me-2"></i>اتصل بالدعم
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Final Confirmation Modal -->
+<div class="modal fade" id="finalConfirmModal" tabindex="-1" aria-labelledby="finalConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="finalConfirmLabel">
+                    <i class="fas fa-bomb me-2"></i>تأكيد أخير قبل الحذف
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle fa-5x text-danger"></i>
+                </div>
+                <h4 class="text-danger mb-3">هذا هو آخر تحذير!</h4>
+                <p class="mb-3">ستقوم بحذف التصنيف <strong class="text-danger">@Model.CategoryName</strong> نهائياً</p>
+
+                <div class="alert alert-danger">
+                    <i class="fas fa-skull me-2"></i>
+                    <strong>لا يمكن التراجع عن هذا الإجراء!</strong>
+                </div>
+
+                <p class="text-muted">هل أنت متأكد 100% من قرارك؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    <i class="fas fa-shield-alt me-2"></i>لا، احتفظ بالتصنيف
+                </button>
+                <button type="button" class="btn btn-danger" id="finalDeleteBtn">
+                    <i class="fas fa-bomb me-2"></i>نعم، احذف نهائياً
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            let countdownTime = 10;
+            let countdownInterval;
+            let canDelete = false;
+
+            const requiredText = '@Model.CategoryName';
+            const checkboxes = ['#confirmImpact', '#confirmBackup', '#confirmFinal'];
+
+            // Start countdown
+            function startCountdown() {
+                countdownInterval = setInterval(function() {
+                    countdownTime--;
+                    $('#countdown').text(countdownTime);
+
+                    const progress = ((10 - countdownTime) / 10) * 100;
+                    $('#progressBar').css('width', progress + '%');
+
+                    if (countdownTime <= 0) {
+                        clearInterval(countdownInterval);
+                        $('#countdownAlert').removeClass('alert-info').addClass('alert-success');
+                        $('#countdown').parent().html('<i class="fas fa-check me-2"></i>يمكنك الآن المتابعة');
+                        checkDeleteButton();
+                    }
+                }, 1000);
+            }
+
+            // Check if delete button should be enabled
+            function checkDeleteButton() {
+                const allChecked = checkboxes.every(cb => $(cb).is(':checked'));
+                const textMatches = $('#confirmText').val().trim() === requiredText;
+                const timeElapsed = countdownTime <= 0;
+
+                canDelete = allChecked && textMatches && timeElapsed;
+                $('#deleteBtn').prop('disabled', !canDelete);
+
+                if (canDelete) {
+                    $('#deleteBtn').removeClass('btn-danger').addClass('btn-outline-danger');
+                } else {
+                    $('#deleteBtn').removeClass('btn-outline-danger').addClass('btn-danger');
+                }
+            }
+
+            // Event listeners
+            checkboxes.forEach(cb => {
+                $(cb).on('change', checkDeleteButton);
+            });
+
+            $('#confirmText').on('input', function() {
+                const value = $(this).val().trim();
+                const isCorrect = value === requiredText;
+
+                $(this).removeClass('is-valid is-invalid');
+                if (value) {
+                    $(this).addClass(isCorrect ? 'is-valid' : 'is-invalid');
+                }
+
+                checkDeleteButton();
+            });
+
+            // Form submission
+            $('#deleteForm').on('submit', function(e) {
+                e.preventDefault();
+
+                if (!canDelete) {
+                    alert('يرجى إكمال جميع الخطوات المطلوبة أولاً');
+                    return;
+                }
+
+                // Show final confirmation
+                $('#finalConfirmModal').modal('show');
+            });
+
+            // Final confirmation
+            $('#finalDeleteBtn').on('click', function() {
+                $('#finalConfirmModal').modal('hide');
+
+                // Show loading
+                const deleteBtn = $('#deleteBtn');
+                const spinner = deleteBtn.find('.spinner-border');
+                const btnText = deleteBtn.find('.btn-text');
+
+                deleteBtn.prop('disabled', true);
+                spinner.removeClass('d-none');
+                btnText.text('جاري الحذف...');
+
+                // Add dramatic delay
+                setTimeout(() => {
+                    $('#deleteForm')[0].submit();
+                }, 2000);
+            });
+
+            // Alternative actions
+            window.archiveCategory = function() {
+                alert('ميزة الأرشفة قيد التطوير');
+            };
+
+            window.disableCategory = function() {
+                alert('ميزة التعطيل المؤقت قيد التطوير');
+            };
+
+            // Keyboard shortcuts
+            $(document).keydown(function(e) {
+                // ESC to cancel
+                if (e.keyCode === 27) {
+                    window.location.href = '@Url.Action("Index")';
+                }
+            });
+
+            // Start the countdown
+            startCountdown();
+
+            // Focus on confirmation text
+            $('#confirmText').focus();
+        });
+    </script>
+
+    <style>
+        .bg-danger.bg-opacity-10 {
+            background-color: rgba(220, 53, 69, 0.1) !important;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "‹";
+            transform: scaleX(-1);
+        }
+
+        .progress {
+            transition: all 0.3s ease;
+        }
+
+        .form-check-input:checked {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        @@keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .modal-content.border-danger {
+            border: 2px solid #dc3545;
+        }
+
+        .alert-heading {
+            font-weight: 600;
+        }
+
+        @@media (max-width: 768px) {
+            .d-flex.justify-content-center.gap-3 {
+                flex-direction: column;
+                gap: 0.75rem !important;
+            }
+
+            .btn-lg {
+                width: 100%;
+            }
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+    </style>
+}

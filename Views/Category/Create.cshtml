@@ -1,0 +1,441 @@
+﻿@model WarehouseApp.Models.Category
+@{
+    ViewData["Title"] = "إضافة تصنيف جديد";
+}
+
+<div class="container-fluid" dir="rtl">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-plus-circle fa-3x"></i>
+                        </div>
+                        <div>
+                            <h1 class="mb-0">إضافة تصنيف جديد</h1>
+                            <p class="mb-0 opacity-75">إضافة تصنيف جديد لتنظيم عناصر المستودع</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light p-3 rounded">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>الرئيسية
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index">
+                            <i class="fas fa-layer-group me-1"></i>إدارة التصنيفات
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <i class="fas fa-plus me-1"></i>إضافة جديد
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white border-bottom-0 py-4">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
+                                 style="width: 80px; height: 80px;">
+                                <i class="fas fa-layer-group fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <h3 class="mb-1">تصنيف جديد</h3>
+                        <p class="text-muted mb-0">املأ البيانات المطلوبة لإضافة التصنيف</p>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="categoryForm" novalidate>
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Category Name Field -->
+                                <div class="form-group mb-4">
+                                    <label asp-for="CategoryName" class="form-label fw-bold">
+                                        <i class="fas fa-tag me-2 text-success"></i>اسم التصنيف
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-folder text-muted"></i>
+                                        </span>
+                                        <input asp-for="CategoryName"
+                                               class="form-control form-control-lg"
+                                               placeholder="أدخل اسم التصنيف..."
+                                               autocomplete="off"
+                                               maxlength="100" />
+                                    </div>
+                                    <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        يجب أن يكون اسم التصنيف واضح ومميز
+                                    </div>
+                                </div>
+
+                                <!-- Additional Info Section -->
+                                <div class="alert alert-info d-flex align-items-start" role="alert">
+                                    <i class="fas fa-lightbulb me-2 mt-1"></i>
+                                    <div>
+                                        <strong>نصائح لاختيار اسم التصنيف:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            <li>استخدم أسماء واضحة ومفهومة</li>
+                                            <li>تجنب الأسماء المكررة</li>
+                                            <li>يفضل استخدام أسماء قصيرة ومعبرة</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Preview Section -->
+                                <div class="card bg-light mb-4" id="previewCard" style="display: none;">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-eye me-2"></i>معاينة التصنيف
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <div class="bg-success bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                                     style="width: 50px; height: 50px;">
+                                                    <i class="fas fa-folder text-success"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0" id="previewName">اسم التصنيف</h6>
+                                                <small class="text-muted">تصنيف جديد</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <button type="submit" class="btn btn-success btn-lg px-5 me-md-2" id="submitBtn">
+                                        <i class="fas fa-check me-2"></i>
+                                        <span class="btn-text">إضافة التصنيف</span>
+                                        <div class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                                        <i class="fas fa-list me-2"></i>رجوع للقائمة
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-home me-1"></i>الصفحة الرئيسية
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-action="Index" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-layer-group me-1"></i>عرض كل التصنيفات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Panel -->
+        <div class="col-lg-4 col-xl-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>مساعدة
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="text-primary">
+                            <i class="fas fa-info-circle me-1"></i>ما هو التصنيف؟
+                        </h6>
+                        <p class="small text-muted mb-0">
+                            التصنيف يساعدك في تنظيم وتجميع الأدوات والعناصر المتشابهة في المستودع.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="text-success">
+                            <i class="fas fa-lightbulb me-1"></i>أمثلة على التصنيفات:
+                        </h6>
+                        <ul class="small text-muted mb-0">
+                            <li>أدوات القطع</li>
+                            <li>أدوات القياس</li>
+                            <li>أدوات الحفر</li>
+                            <li>قطع الغيار</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-warning small" role="alert">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        تأكد من عدم تكرار أسماء التصنيفات الموجودة
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>إحصائيات سريعة
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="mb-2">
+                            <i class="fas fa-layer-group fa-2x text-info"></i>
+                        </div>
+                        <h4 class="text-info mb-0">عدد التصنيفات</h4>
+                        <p class="text-muted small">الحالية في النظام</p>
+                        <a asp-action="Index" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-eye me-1"></i>عرض الكل
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">
+                    <i class="fas fa-check-circle me-2"></i>تم بنجاح
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-check-circle fa-4x text-success"></i>
+                </div>
+                <h5>تم إضافة التصنيف بنجاح!</h5>
+                <p class="text-muted">يمكنك الآن استخدام هذا التصنيف في تنظيم عناصر المستودع</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-action="Index" class="btn btn-success">
+                    <i class="fas fa-list me-2"></i>عرض كل التصنيفات
+                </a>
+                <button type="button" class="btn btn-primary" onclick="window.location.reload()">
+                    <i class="fas fa-plus me-2"></i>إضافة تصنيف آخر
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function() {
+            // Live preview functionality
+            $('#CategoryName').on('input', function() {
+                const value = $(this).val().trim();
+                if (value) {
+                    $('#previewName').text(value);
+                    $('#previewCard').fadeIn();
+                } else {
+                    $('#previewCard').fadeOut();
+                }
+            });
+
+            // Form submission with loading state
+            $('#categoryForm').on('submit', function(e) {
+                const submitBtn = $('#submitBtn');
+                const spinner = submitBtn.find('.spinner-border');
+                const btnText = submitBtn.find('.btn-text');
+
+                // Show loading state
+                submitBtn.prop('disabled', true);
+                spinner.removeClass('d-none');
+                btnText.text('جاري الإضافة...');
+            });
+
+            // Form validation enhancement
+            $('#CategoryName').on('blur', function() {
+                validateCategoryName($(this));
+            });
+
+            // Auto-focus on category name input
+            $('#CategoryName').focus();
+
+            // Character counter
+            $('#CategoryName').on('input', function() {
+                const maxLength = 100;
+                const currentLength = $(this).val().length;
+                const remaining = maxLength - currentLength;
+
+                let counterText = `${currentLength}/${maxLength} حرف`;
+                if (remaining < 20) {
+                    counterText = `<span class="text-warning">${counterText}</span>`;
+                }
+                if (remaining < 5) {
+                    counterText = `<span class="text-danger">${counterText}</span>`;
+                }
+
+                // Add counter if not exists
+                if (!$(this).next('.char-counter').length) {
+                    $(this).after('<div class="char-counter form-text"></div>');
+                }
+                $(this).next('.char-counter').html(counterText);
+            });
+        });
+
+        // Custom validation function
+        function validateCategoryName(input) {
+            const value = input.val().trim();
+            const errorSpan = input.parent().next('.text-danger');
+
+            if (!value) {
+                input.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else if (value.length < 2) {
+                input.removeClass('is-valid').addClass('is-invalid');
+                errorSpan.text('اسم التصنيف يجب أن يكون أطول من حرفين');
+                return false;
+            } else {
+                input.removeClass('is-invalid').addClass('is-valid');
+                errorSpan.text('');
+                return true;
+            }
+        }
+
+        // Show success modal if form was submitted successfully
+        @if (ViewBag.Success == true)
+        {
+            <text>
+            $(document).ready(function() {
+                $('#successModal').modal('show');
+            });
+            </text>
+        }
+
+        // Keyboard shortcuts
+        $(document).keydown(function(e) {
+            // Ctrl + Enter to submit
+            if (e.ctrlKey && e.keyCode === 13) {
+                $('#categoryForm').submit();
+            }
+            // ESC to go back
+            if (e.keyCode === 27) {
+                window.location.href = '@Url.Action("Index")';
+            }
+        });
+
+        // Auto-save draft (optional feature)
+        let autoSaveTimer;
+        $('#CategoryName').on('input', function() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(function() {
+                // Save draft to localStorage
+                localStorage.setItem('categoryDraft', $('#CategoryName').val());
+            }, 1000);
+        });
+
+        // Load draft on page load
+        $(document).ready(function() {
+            const draft = localStorage.getItem('categoryDraft');
+            if (draft && !$('#CategoryName').val()) {
+                $('#CategoryName').val(draft);
+                $('#CategoryName').trigger('input');
+            }
+        });
+
+        // Clear draft after successful submission
+        $('#categoryForm').on('submit', function() {
+            localStorage.removeItem('categoryDraft');
+        });
+    </script>
+
+    <style>
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+        }
+
+        .form-control.is-valid {
+            border-color: #198754;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .bg-success.bg-opacity-10 {
+            background-color: rgba(25, 135, 84, 0.1) !important;
+        }
+
+        .bg-success.bg-opacity-20 {
+            background-color: rgba(25, 135, 84, 0.2) !important;
+        }
+
+        .input-group-lg .input-group-text {
+            font-size: 1.1rem;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "‹";
+            transform: scaleX(-1);
+        }
+
+        @@media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem 1rem;
+            }
+
+            .d-grid.gap-2.d-md-flex {
+                flex-direction: column;
+            }
+
+            .btn-lg {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .char-counter {
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+    </style>
+}

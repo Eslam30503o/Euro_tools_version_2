@@ -1,0 +1,576 @@
+﻿@model WarehouseApp.Models.Category
+@{
+    ViewData["Title"] = "تعديل التصنيف";
+}
+
+<div class="container-fluid" dir="rtl">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-edit fa-3x"></i>
+                        </div>
+                        <div>
+                            <h1 class="mb-0">تعديل التصنيف</h1>
+                            <p class="mb-0 opacity-75">تحديث بيانات التصنيف: <strong>@Model.CategoryName</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light p-3 rounded">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>الرئيسية
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index">
+                            <i class="fas fa-layer-group me-1"></i>إدارة التصنيفات
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <i class="fas fa-edit me-1"></i>تعديل: @Model.CategoryName
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white border-bottom-0 py-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <div class="bg-warning bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-layer-group fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="mb-1">تحديث التصنيف</h3>
+                            <p class="text-muted mb-0">قم بتعديل اسم التصنيف حسب الحاجة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" id="editCategoryForm" novalidate>
+                        <input type="hidden" asp-for="CategoryID" />
+
+                        <!-- Original Name Display -->
+                        <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <div>
+                                <strong>الاسم الحالي:</strong> @Model.CategoryName
+                                <br>
+                                <small class="text-muted">رقم التصنيف: @Model.CategoryID</small>
+                            </div>
+                        </div>
+
+                        <!-- Category Name Field -->
+                        <div class="form-group mb-4">
+                            <label asp-for="CategoryName" class="form-label fw-bold">
+                                <i class="fas fa-tag me-2 text-warning"></i>الاسم الجديد للتصنيف
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">
+                                    <i class="fas fa-folder text-muted"></i>
+                                </span>
+                                <input asp-for="CategoryName"
+                                       class="form-control form-control-lg"
+                                       placeholder="أدخل الاسم الجديد للتصنيف..."
+                                       autocomplete="off"
+                                       maxlength="100"
+                                       data-original-value="@Model.CategoryName" />
+                            </div>
+                            <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                سيتم تحديث جميع العناصر المرتبطة بهذا التصنيف
+                            </div>
+                        </div>
+
+                        <!-- Changes Preview -->
+                        <div class="card bg-light mb-4" id="changesPreview" style="display: none;">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-exchange-alt me-2"></i>معاينة التغييرات
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center p-3 border rounded bg-white">
+                                            <i class="fas fa-arrow-left text-danger mb-2"></i>
+                                            <h6 class="text-muted">الاسم القديم</h6>
+                                            <span class="badge bg-light text-dark" id="oldName">@Model.CategoryName</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center p-3 border rounded bg-white">
+                                            <i class="fas fa-arrow-right text-success mb-2"></i>
+                                            <h6 class="text-muted">الاسم الجديد</h6>
+                                            <span class="badge bg-success" id="newName">الاسم الجديد</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Warning Notice -->
+                        <div class="alert alert-warning d-flex align-items-start" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2 mt-1"></i>
+                            <div>
+                                <strong>تنبيه مهم:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>تعديل اسم التصنيف سيؤثر على جميع العناصر المرتبطة به</li>
+                                    <li>تأكد من صحة الاسم الجديد قبل الحفظ</li>
+                                    <li>لا يمكن التراجع عن هذا التغيير بسهولة</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                    <button type="submit" class="btn btn-warning btn-lg px-5" id="saveBtn">
+                                        <i class="fas fa-save me-2"></i>
+                                        <span class="btn-text">حفظ التغييرات</span>
+                                        <div class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-lg px-4" onclick="resetForm()">
+                                        <i class="fas fa-undo me-2"></i>إعادة تعيين
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                                        <i class="fas fa-list me-2"></i>رجوع للقائمة
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-home me-1"></i>الصفحة الرئيسية
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-action="Details" asp-route-id="@Model.CategoryID" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-eye me-1"></i>عرض التفاصيل
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-action="Index" class="btn btn-link text-decoration-none">
+                                <i class="fas fa-layer-group me-1"></i>كل التصنيفات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Category Info -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>معلومات التصنيف
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <div class="bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width: 50px; height: 50px;">
+                                <i class="fas fa-layer-group text-primary"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">@Model.CategoryName</h6>
+                            <small class="text-muted">ID: @Model.CategoryID</small>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-primary mb-0">0</h5>
+                                <small class="text-muted">عناصر مرتبطة</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-info mb-0">نشط</h5>
+                                <small class="text-muted">الحالة</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Panel -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>نصائح للتعديل
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="small mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-1"></i>
+                            استخدم أسماء واضحة ومفهومة
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-1"></i>
+                            تجنب الأسماء المكررة
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-1"></i>
+                            اختر أسماء قصيرة ومعبرة
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check text-success me-1"></i>
+                            تأكد من دقة الإملاء
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-history me-2"></i>النشاط الأخير
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">تم إنشاء التصنيف</h6>
+                                <small class="text-muted">منذ فترة</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="confirmModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>تأكيد التعديل
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-edit fa-3x text-warning"></i>
+                </div>
+                <h5 class="text-center">هل أنت متأكد من حفظ التغييرات؟</h5>
+                <div class="alert alert-light mt-3">
+                    <div class="row">
+                        <div class="col-6 text-center">
+                            <strong>من:</strong>
+                            <br><span class="badge bg-light text-dark" id="modalOldName">@Model.CategoryName</span>
+                        </div>
+                        <div class="col-6 text-center">
+                            <strong>إلى:</strong>
+                            <br><span class="badge bg-warning text-dark" id="modalNewName">الاسم الجديد</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-muted text-center mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    سيتم تحديث جميع العناصر المرتبطة بهذا التصنيف
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>إلغاء
+                </button>
+                <button type="button" class="btn btn-warning" id="confirmSaveBtn">
+                    <i class="fas fa-save me-2"></i>تأكيد الحفظ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">
+                    <i class="fas fa-check-circle me-2"></i>تم بنجاح
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-check-circle fa-4x text-success"></i>
+                </div>
+                <h5>تم تحديث التصنيف بنجاح!</h5>
+                <p class="text-muted">تم حفظ التغييرات وتحديث جميع العناصر المرتبطة</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-action="Index" class="btn btn-success">
+                    <i class="fas fa-list me-2"></i>عرض كل التصنيفات
+                </a>
+                <a asp-action="Details" asp-route-id="@Model.CategoryID" class="btn btn-info">
+                    <i class="fas fa-eye me-2"></i>عرض التفاصيل
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function() {
+            const originalValue = $('#CategoryName').data('original-value');
+            let hasChanges = false;
+
+            // Monitor changes
+            $('#CategoryName').on('input', function() {
+                const currentValue = $(this).val().trim();
+                hasChanges = currentValue !== originalValue && currentValue !== '';
+
+                if (hasChanges && currentValue) {
+                    $('#newName, #modalNewName').text(currentValue);
+                    $('#changesPreview').fadeIn();
+                } else {
+                    $('#changesPreview').fadeOut();
+                }
+
+                // Update save button state
+                $('#saveBtn').prop('disabled', !hasChanges || !currentValue);
+            });
+
+            // Form submission with confirmation
+            $('#editCategoryForm').on('submit', function(e) {
+                e.preventDefault();
+
+                if (hasChanges) {
+                    // Show confirmation modal
+                    $('#confirmModal').modal('show');
+                } else {
+                    alert('لم يتم إجراء أي تغييرات');
+                }
+            });
+
+            // Confirm save
+            $('#confirmSaveBtn').on('click', function() {
+                $('#confirmModal').modal('hide');
+
+                // Show loading state
+                const saveBtn = $('#saveBtn');
+                const spinner = saveBtn.find('.spinner-border');
+                const btnText = saveBtn.find('.btn-text');
+
+                saveBtn.prop('disabled', true);
+                spinner.removeClass('d-none');
+                btnText.text('جاري الحفظ...');
+
+                // Submit form
+                $('#editCategoryForm')[0].submit();
+            });
+
+            // Reset form
+            window.resetForm = function() {
+                $('#CategoryName').val(originalValue);
+                $('#CategoryName').trigger('input');
+                $('#CategoryName').removeClass('is-invalid is-valid');
+                $('.text-danger').text('');
+            };
+
+            // Auto-focus and select all
+            $('#CategoryName').focus().select();
+
+            // Character counter
+            $('#CategoryName').on('input', function() {
+                const maxLength = 100;
+                const currentLength = $(this).val().length;
+                const remaining = maxLength - currentLength;
+
+                let counterText = `${currentLength}/${maxLength} حرف`;
+                if (remaining < 20) {
+                    counterText = `<span class="text-warning">${counterText}</span>`;
+                }
+                if (remaining < 5) {
+                    counterText = `<span class="text-danger">${counterText}</span>`;
+                }
+
+                // Add counter if not exists
+                if (!$(this).next('.char-counter').length) {
+                    $(this).after('<div class="char-counter form-text"></div>');
+                }
+                $(this).next('.char-counter').html(counterText);
+            });
+
+            // Form validation enhancement
+            $('#CategoryName').on('blur', function() {
+                validateCategoryName($(this));
+            });
+
+            // Keyboard shortcuts
+            $(document).keydown(function(e) {
+                // Ctrl + S to save
+                if (e.ctrlKey && e.keyCode === 83) {
+                    e.preventDefault();
+                    if (hasChanges) {
+                        $('#editCategoryForm').submit();
+                    }
+                }
+                // Ctrl + R to reset
+                if (e.ctrlKey && e.keyCode === 82) {
+                    e.preventDefault();
+                    resetForm();
+                }
+                // ESC to go back
+                if (e.keyCode === 27) {
+                    if ($('.modal').hasClass('show')) {
+                        $('.modal').modal('hide');
+                    } else {
+                        window.location.href = '@Url.Action("Index")';
+                    }
+                }
+            });
+
+            // Warn before leaving if changes exist
+            $(window).on('beforeunload', function() {
+                if (hasChanges) {
+                    return 'لديك تغييرات غير محفوظة. هل أنت متأكد من المغادرة؟';
+                }
+            });
+
+            // Initialize
+            $('#CategoryName').trigger('input');
+        });
+
+        // Custom validation function
+        function validateCategoryName(input) {
+            const value = input.val().trim();
+            const errorSpan = input.parent().next('.text-danger');
+
+            if (!value) {
+                input.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else if (value.length < 2) {
+                input.removeClass('is-valid').addClass('is-invalid');
+                errorSpan.text('اسم التصنيف يجب أن يكون أطول من حرفين');
+                return false;
+            } else {
+                input.removeClass('is-invalid').addClass('is-valid');
+                errorSpan.text('');
+                return true;
+            }
+        }
+
+        // Show success modal if updated successfully
+        @if (ViewBag.Success == true)
+        {
+            <text>
+            $(document).ready(function() {
+                $('#successModal').modal('show');
+            });
+            </text>
+        }
+    </script>
+
+    <style>
+        .form-control:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        }
+
+        .bg-warning.bg-opacity-20 {
+            background-color: rgba(255, 193, 7, 0.2) !important;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items-start;
+            padding-bottom: 1rem;
+        }
+
+        .timeline-marker {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "‹";
+            transform: scaleX(-1);
+        }
+
+        .char-counter {
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        @@media (max-width: 768px) {
+            .d-flex.justify-content-center.gap-3 {
+                flex-direction: column;
+                gap: 0.5rem !important;
+            }
+
+            .btn-lg {
+                width: 100%;
+            }
+
+            .card-body {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+    </style>
+}

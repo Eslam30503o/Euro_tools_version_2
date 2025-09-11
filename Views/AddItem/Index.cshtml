@@ -3,6 +3,10 @@
     ViewData["Title"] = "Add New Item";
 }
 
+<h1>Tools List</h1>
+<a asp-controller="AddItem" asp-action="Import" class="btn btn-success mb-3">Import</a>
+
+
 <div class="container-fluid">
     <!-- Header Section -->
     <div class="row mb-4">
@@ -361,7 +365,7 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('addItemForm');
         const currentStockInput = document.getElementById('CurrentStock');
         const reorderLevelInput = document.getElementById('ReorderLevel');
@@ -397,7 +401,7 @@
         reorderLevelInput.addEventListener('input', updateStockStatus);
 
         // Form validation
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             e.preventDefault();
 
             if (validateForm()) {
@@ -453,7 +457,7 @@
         const itemNameInput = document.getElementById('ItemName');
         const itemCodeInput = document.getElementById('ItemCode');
 
-        itemNameInput.addEventListener('input', function() {
+        itemNameInput.addEventListener('input', function () {
             if (!itemCodeInput.value) {
                 const suggestion = generateItemCodeSuggestion(this.value);
                 itemCodeInput.placeholder = `Suggestion: ${suggestion}`;
@@ -477,7 +481,7 @@
         }
 
         // Item code format validation
-        itemCodeInput.addEventListener('input', function() {
+        itemCodeInput.addEventListener('input', function () {
             this.value = this.value.toUpperCase();
         });
     });
@@ -515,7 +519,7 @@
     }
 
     // Clear saved data on successful submit
-    window.addEventListener('beforeunload', function() {
+    window.addEventListener('beforeunload', function () {
         const form = document.getElementById('addItemForm');
         if (form && !form.querySelector('.spinner-border:not(.d-none)')) {
             autoSave();

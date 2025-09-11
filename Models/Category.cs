@@ -7,11 +7,6 @@ namespace WarehouseApp.Models
     public class Category
     {
         public int CategoryID { get; set; }
-
-        [Required]
-        public string CategoryName { get; set; }
-
-        // Navigation property
-        public ICollection<Item> Items { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
     }
 }
