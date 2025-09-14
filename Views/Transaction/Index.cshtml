@@ -1,61 +1,512 @@
 ﻿@model IEnumerable<WarehouseApp.Models.Transaction>
-
     @{
     ViewData["Title"] = "سجل الحركات";
     }
 
-    <h2>سجل الحركات</h2>
-    <form method="get" class="mb-4">
-        <div class="row g-2">
-            <div class="col-md-2">
-                <input type="text" name="search" class="form-control" placeholder="بحث بالاسم أو الكود" value="@Context.Request.Query["search"]" />
-            </div>
+    <style>
+    .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
 
-            <div class="col-md-2">
-                <select name="actionType" class="form-control">
-                    <option value="">كل العمليات</option>
-                    <option value="Withdraw" selected="@(Context.Request.Query["actionType"] == "Withdraw" ? "selected" : null)">سحب</option>
-                    <option value="Add" selected="@(Context.Request.Query["actionType"] == "Add" ? "selected" : null)">إضافة</option>
-                </select>
-            </div>
+    .filter-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    }
 
-            <div class="col-md-2">
-                <input type="date" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
-            </div>
+    .table-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
 
-            <div class="col-md-2">
-                <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
-            </div>
+    .table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        border: none;
+        padding: 15px 12px;
+    }
 
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">تصفية</button>
-                <a href="@Url.Action("Index")" class="btn btn-secondary">إعادة تعيين</a>
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .action-withdraw {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+    }
+
+    .action-add {
+        background: linear-gradient(135deg, #51cf66, #40c057);
+        color: white;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        border-left: 4px solid;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stats-card.total {
+        border-left-color: #667eea;
+    }
+
+    .stats-card.withdraw {
+        border-left-color: #ff6b6b;
+    }
+
+    .stats-card.add {
+        border-left-color: #51cf66;
+    }
+
+    .filter-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .reset-btn {
+        background: linear-gradient(135deg, #868e96, #6c757d);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .reset-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .transaction-id {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+
+    .quantity-positive {
+        color: #51cf66;
+        font-weight: bold;
+    }
+
+    .quantity-negative {
+        color: #ff6b6b;
+        font-weight: bold;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px 0;
+        margin: -20px -20px 30px -20px;
+        border-radius: 0 0 25px 25px;
+    }
+
+    .animated {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .export-buttons {
+        margin-bottom: 20px;
+    }
+
+    .export-btn {
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-weight: 600;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 0.85em;
+        }
+        .stats-card {
+            margin-bottom: 15px;
+        }
+    }
+    </style>
+
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1 class="text-center mb-0">
+                <i class="fas fa-history me-3"></i>
+                سجل حركات المخزون
+            </h1>
+            <p class="text-center mb-0 mt-2 opacity-75">تتبع جميع عمليات الإضافة والسحب</p>
+        </div>
+    </div>
+
+    <div class="container-fluid animated">
+        <!-- إحصائيات سريعة -->
+        @if (Model != null && Model.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="stats-card total">
+                    <h3 class="text-primary">@Model.Count()</h3>
+                    <p class="mb-0">إجمالي الحركات</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card withdraw">
+                    <h3 class="text-danger">@Model.Count(t => t.Action == "OUT")</h3>
+                    <p class="mb-0">عمليات السحب</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card add">
+                    <h3 class="text-success">@Model.Count(t => t.Action == "IN")</h3>
+                    <p class="mb-0">عمليات الإضافة</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card total">
+                    <h3 class="text-info">@Model.Select(t => t.User?.Username).Distinct().Count()</h3>
+                    <p class="mb-0">المستخدمون النشطون</p>
+                </div>
             </div>
         </div>
-    </form>
+    }
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>المنتج</th>
-                <th>المستخدم</th>
-                <th>نوع العملية</th>
-                <th>الكمية</th>
-                <th>الوقت</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in Model)
+        <!-- فلاتر البحث -->
+        <div class="filter-card mb-4 p-4">
+            <h5 class="mb-3">
+                <i class="fas fa-filter me-2"></i>
+                فلاتر البحث والتصفية
+            </h5>
+            <form method="get">
+                <div class="row g-3">
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <label class="form-label fw-bold">البحث</label>
+                        <input type="text" name="search" class="form-control" placeholder="اسم المنتج أو الكود" value="@Context.Request.Query["search"]" />
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <label class="form-label fw-bold">نوع العملية</label>
+                        <select name="actionType" class="form-control">
+                            <option value="">كل العمليات</option>
+                            <option value="OUT" selected="@(Context.Request.Query["actionType"] == "OUT" ? "selected" : null)">
+                                <i class="fas fa-minus-circle"></i> سحب
+                            </option>
+                            <option value="IN" selected="@(Context.Request.Query["actionType"] == "IN" ? "selected" : null)">
+                                <i class="fas fa-plus-circle"></i> إضافة
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <label class="form-label fw-bold">من تاريخ</label>
+                        <input type="date" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]" />
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <label class="form-label fw-bold">إلى تاريخ</label>
+                        <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="filter-btn flex-grow-1">
+                                <i class="fas fa-search me-2"></i>
+                                تصفية
+                            </button>
+                            <a href="@Url.Action("Index")" class="reset-btn flex-grow-1 text-center">
+                                <i class="fas fa-refresh me-2"></i>
+                                إعادة تعيين
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- أزرار التصدير -->
+        @if (Model != null && Model.Any())
+    {
+        <div class="export-buttons text-end">
+            <button type="button" class="btn btn-success export-btn" onclick="exportToExcel()">
+                <i class="fas fa-file-excel me-2"></i>
+                تصدير Excel
+            </button>
+            <button type="button" class="btn btn-danger export-btn" onclick="exportToPDF()">
+                <i class="fas fa-file-pdf me-2"></i>
+                تصدير PDF
+            </button>
+            <button type="button" class="btn btn-info export-btn" onclick="printReport()">
+                <i class="fas fa-print me-2"></i>
+                طباعة
+            </button>
+        </div>
+    }
+
+        <!-- جدول البيانات -->
+        <div class="table-container">
+            @if (Model != null && Model.Any())
         {
-            <tr>
-                <td>@t.TransactionID</td>
-                <td>@t.Item?.ItemName</td>
-                <td>@t.User?.UserName</td>
-                <td>@t.Action</td>
-                <td>@t.QuantityChange</td>
-                <td>@t.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
-            </tr>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <i class="fas fa-hashtag me-2"></i>
+                                رقم المعاملة
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-box me-2"></i>
+                                المنتج
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-user me-2"></i>
+                                المستخدم
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-exchange-alt me-2"></i>
+                                نوع العملية
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-sort-numeric-up me-2"></i>
+                                تغيير الكمية
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-clock me-2"></i>
+                                التاريخ والوقت
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in Model.OrderByDescending(x => x.Timestamp))
+                        {
+                        <tr>
+                            <td>
+                                <span class="transaction-id">#@t.TransactionID</span>
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>@(t.Item?.ItemName ?? "غير محدد")</strong>
+                                    @if (!string.IsNullOrEmpty(t.Item?.ItemCode))
+                                        {
+                                    <br><small class="text-muted">كود: @t.Item.ItemCode</small>
+                                        }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle me-2 text-muted"></i>
+                                    @(t.User?.Username ?? "مستخدم محذوف")
+                                </div>
+                            </td>
+                            <td>
+                                @if (t.Action == "OUT")
+                                    {
+                                <span class="action-badge action-withdraw">
+                                    <i class="fas fa-minus me-1"></i>
+
+                                    سحب
+                                </span>
+                                    }
+                                    else if (t.Action == "IN")
+                                    {
+                                <span class="action-badge action-add">
+                                    <i class="fas fa-plus me-1"></i>
+                                    إضافة
+                                </span>
+                                    }
+                                    else
+                                    {
+                                <span class="badge bg-secondary">@t.Action</span>
+                                    }
+                            </td>
+                            <td class="text-center">
+                                @if (t.Action == "IN")
+    {
+                                <span class="quantity-positive">
+                                    <i class="fas fa-arrow-up me-1"></i>
+                                    +@t.QuantityChange
+                                </span>
+    }
+    else if (t.Action == "OUT")
+    {
+                                <span class="quantity-negative">
+                                    <i class="fas fa-arrow-down me-1"></i>
+                                    -@Math.Abs(t.QuantityChange)
+                                </span>
+    }
+    else
+    {
+                                <span>@t.QuantityChange</span>
+    }
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>@t.Timestamp.ToString("yyyy/MM/dd")</strong>
+                                    <br>
+                                    <small class="text-muted">@t.Timestamp.ToString("HH:mm:ss")</small>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-        </tbody>
-    </table>
+        else
+        {
+            <div class="text-center p-5">
+                <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">لا توجد حركات مطابقة للبحث</h4>
+                <p class="text-muted">جرب تغيير معايير البحث أو إعادة تعيين الفلاتر</p>
+                <a href="@Url.Action("Index")" class="btn btn-primary">
+                    <i class="fas fa-refresh me-2"></i>
+                    إعادة تعيين الفلاتر
+                </a>
+            </div>
+        }
+        </div>
+
+        <!-- معلومات إضافية -->
+        @if (Model != null && Model.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-info-circle me-2"></i>
+                            ملخص الحركات
+                        </h6>
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <small class="text-muted">آخر حركة</small>
+                                <br><strong>@Model.OrderByDescending(t => t.Timestamp).First().Timestamp.ToString("yyyy/MM/dd HH:mm")</strong>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">أول حركة</small>
+                                <br><strong>@Model.OrderBy(t => t.Timestamp).First().Timestamp.ToString("yyyy/MM/dd HH:mm")</strong>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">إجمالي الإضافات</small>
+                                <br><strong class="text-success">@Model.Where(t => t.Action == "IN").Sum(t => t.QuantityChange)</strong>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">إجمالي السحوبات</small>
+                                <br><strong class="text-danger">@Model.Where(t => t.Action == "OUT").Sum(t => Math.Abs(t.QuantityChange))</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+
+    <script>
+    // وظيفة طباعة التقرير
+    function printReport() {
+        window.print();
+    }
+
+    // وظيفة تصدير Excel
+    function exportToExcel() {
+        alert('ستتم إضافة وظيفة تصدير Excel قريباً');
+    }
+
+    // وظيفة تصدير PDF
+    function exportToPDF() {
+        alert('ستتم إضافة وظيفة تصدير PDF قريباً');
+    }
+
+    // تأثير التحميل المتدرج للصفوف
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                row.style.transition = 'all 0.4s ease';
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 50);
+            }, index * 50);
+        });
+    });
+
+    // تحديث تلقائي كل 30 ثانية للحركات الحديثة
+    setInterval(function() {
+        // يمكن إضافة AJAX call هنا للتحديث التلقائي
+        console.log('تحقق من وجود حركات جديدة...');
+    }, 30000);
+    </script>

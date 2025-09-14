@@ -29,8 +29,8 @@
             <div class="mb-4">
                 <label asp-for="Action" class="form-label fs-5 fw-bold text-muted">نوع العملية</label>
                 <select asp-for="Action" class="form-control form-control-lg">
-                    <option value="Add">إضافة إلى المخزون</option>
-                    <option value="Withdraw">سحب من المخزون</option>
+                    <option value="IN">إضافة إلى المخزون</option>
+                    <option value="OUT">سحب من المخزون</option>
                 </select>
                 <span asp-validation-for="Action" class="text-danger mt-1 d-block"></span>
             </div>

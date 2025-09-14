@@ -4,9 +4,11 @@ using WarehouseApp.Data;
 using WarehouseApp.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
+    [Authorize(Roles = "Manager,Admin,Supervisor")]
     public class ToolController : Controller
     {
         private readonly WarehouseDbContext _context;

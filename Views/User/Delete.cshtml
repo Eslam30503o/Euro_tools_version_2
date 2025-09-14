@@ -1,0 +1,8 @@
+﻿@model WarehouseApp.Models.User
+
+@{
+ViewData["Title"] = "تأكيد حذف المستخدم";
+}
+
+<h2 class="text-danger">هل أنت متأكد من الحذف؟</h2> <div class="alert alert-warning"> <strong>اسم المستخدم:</strong> @Model.Username <br /> <strong>الدور:</strong> @Model.Role </div>
+<form asp-action="Delete" method="post"> <input type="hidden" asp-for="UserID" /> <button type="submit" class="btn btn-danger">🗑️ حذف</button> <a asp-action="Index" class="btn btn-secondary">إلغاء</a> </form>

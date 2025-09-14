@@ -8,10 +8,13 @@ using System.Linq;
 using CsvHelper;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel; // ✅ مهم تضيف دي
+using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
+    [Authorize(Roles = "Manager,Admin")]
     public class AddItemController : Controller
     {
         private readonly WarehouseDbContext _context;
@@ -60,6 +63,16 @@ namespace WarehouseApp.Controllers
         public IActionResult Import()
         {
             return View();
+        }
+
+        public async Task<IActionResult> LowStockItems()
+        {
+            var lowStockItems = await _context.Items
+                .Include(i => i.Category)
+                .Where(i => i.CurrentStock <= i.ReorderLevel)
+                .ToListAsync();
+
+            return View(lowStockItems);
         }
 
         // POST: AddItem/Import (CSV + Excel)

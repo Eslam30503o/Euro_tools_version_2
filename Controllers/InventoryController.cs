@@ -5,7 +5,10 @@ using WarehouseApp.Data;
 using WarehouseApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize(Roles = "User,Manager,Admin,Supervisor")]
 public class InventoryController : Controller
 {
     private readonly WarehouseDbContext _context;
@@ -67,7 +70,7 @@ public class InventoryController : Controller
             return NotFound();
 
         // تحديث الكمية في جدول Items
-        if (model.Action == "Withdraw")
+        if (model.Action == "OUT")
         {
             if (item.CurrentStock < model.Quantity)
             {
@@ -82,20 +85,30 @@ public class InventoryController : Controller
             }
             item.CurrentStock -= model.Quantity;
         }
-        else if (model.Action == "Add")
+        else if (model.Action == "IN")
         {
             item.CurrentStock += model.Quantity;
         }
 
         // إضافة حركة في جدول Transactions
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null)
+        {
+            return Unauthorized(); // المستخدم مش مسجل دخول أو فيه مشكلة
+        }
+
+        int userId = int.Parse(userIdClaim.Value);
+
+        // بعد كده استخدم userId
         var transaction = new Transaction
         {
             ItemID = model.ItemID,
             Action = model.Action,
-            QuantityChange = model.Action == "Withdraw" ? -model.Quantity : model.Quantity,
+            QuantityChange = model.Action == "OUT" ? -model.Quantity : model.Quantity,
             Timestamp = DateTime.Now,
-            UserID = 1
+            UserID = userId
         };
+
 
         _context.Transactions.Add(transaction);
         _context.Items.Update(item);

@@ -10,6 +10,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication("WarehouseAuth")
+    .AddCookie("WarehouseAuth", options =>
+    {
+        options.LoginPath = "/Login"; // لو المستخدم مش مسجل دخول يروح على دي
+        options.AccessDeniedPath = "/Login/AccessDenied"; // هذا مهم
+
+    });
+
+builder.Services.AddAuthorization(); // لو هتستخدم [Authorize]
 
 var app = builder.Build();
 
@@ -32,7 +41,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -2,10 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Controllers",
+    "\\Data",
     "\\Views",
-    "\\Views\\AddItem",
-    "\\Views\\Items"
+    "\\Views\\Login",
+    "\\Views\\Shared"
   ],
-  "SelectedNode": "\\Views\\AddItem\\Index.cshtml",
+  "SelectedNode": "\\Views\\Shared\\_Layout.cshtml",
   "PreviewInSolutionExplorer": false
 }

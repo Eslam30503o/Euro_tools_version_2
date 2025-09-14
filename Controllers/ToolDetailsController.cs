@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseApp.Data;
 using WarehouseApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
+    [Authorize(Roles = "Manager,Admin,Supervisor")]
     public class ToolDetailsController : Controller
     {
         private readonly WarehouseDbContext _context;

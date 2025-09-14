@@ -16,6 +16,13 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
+                    @if (User.Identity.IsAuthenticated)
+{
+                    <form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">🚪 تسجيل الخروج</button>
+                    </form>
+}
+
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
@@ -44,6 +51,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @if (TempData["PermissionDenied"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show fixed-top mx-auto w-50 mt-3 text-center shadow" role="alert" style="z-index:9999;">
+        @TempData["PermissionDenied"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

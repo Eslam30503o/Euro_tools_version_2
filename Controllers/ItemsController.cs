@@ -10,8 +10,11 @@ using WarehouseApp.Models;
 using CsvHelper;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+
 namespace WarehouseApp.Controllers
 {
+    [Authorize(Roles = "Manager,Admin")]
     public class ItemsController : Controller
     {
         private readonly WarehouseDbContext _context;

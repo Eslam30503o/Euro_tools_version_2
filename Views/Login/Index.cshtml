@@ -2,6 +2,13 @@
     ViewData["Title"] = "Login";
 }
 
+@if (TempData["LogoutMessage"] != null)
+{
+<div class="alert alert-success text-center">
+    @TempData["LogoutMessage"]
+</div>
+}
+
 <div class="login-container">
     <div class="login-background">
         <div class="animated-bg">

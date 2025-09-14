@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarehouseApp.Data;
 using WarehouseApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly WarehouseDbContext _context;

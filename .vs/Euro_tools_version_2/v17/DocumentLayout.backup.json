@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Inventory\\Create.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Inventory\\Create.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\UserController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\UserController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\InventoryController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\InventoryController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\TransactionViewModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\TransactionViewModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Home\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Home\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,41 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "InventoryController.cs",
-              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\InventoryController.cs",
-              "RelativeDocumentMoniker": "Controllers\\InventoryController.cs",
-              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\InventoryController.cs",
-              "RelativeToolTip": "Controllers\\InventoryController.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAADwv2kAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T10:07:30.383Z",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADwAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-14T09:12:13.811Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TransactionViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\TransactionViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\TransactionViewModel.cs",
-              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\TransactionViewModel.cs",
-              "RelativeToolTip": "Models\\TransactionViewModel.cs",
+              "DocumentIndex": 1,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T09:19:41.803Z",
+              "WhenOpened": "2025-09-14T09:03:56.953Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Inventory\\Create.cshtml",
-              "RelativeDocumentMoniker": "Views\\Inventory\\Create.cshtml",
-              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Views\\Inventory\\Create.cshtml",
-              "RelativeToolTip": "Views\\Inventory\\Create.cshtml",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAmwB4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-09-11T08:59:18.785Z",
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\euro.tr\\Desktop\\WarehouseApp\\Euro_tools_version_2\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Controllers\\UserController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAH0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T08:55:47.599Z",
               "EditorCaption": ""
             }
           ]

@@ -100,11 +100,12 @@
                             <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Index">
                                 <i class="fas fa-clipboard-list me-2"></i>عرض السجلات
                             </a>
+                            <a asp-controller="Inventory" asp-action="Create" class="btn btn-primary m-2">
+                                <i class="fas fa-clipboard-list me-2"></i>اداره المخزون
+                            </a>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <a asp-controller="Inventory" asp-action="Create" class="btn btn-primary m-2">اضافه منتج </a>
-                    </div>
+                   
 
                 </div>
             </div>
@@ -119,11 +120,8 @@
                     <div class="card-body">
                         <p class="card-text">إدارة المستخدمين وصلاحياتهم في النظام</p>
                         <div class="button-group">
-                            <a class="btn btn-info" asp-controller="Users" asp-action="Index">
+                            <a class="btn btn-info" asp-controller="User" asp-action="Index">
                                 <i class="fas fa-users-cog me-2"></i>إدارة المستخدمين
-                            </a>
-                            <a class="btn btn-primary mt-2" asp-controller="User" asp-action="AddUser">
-                                <i class="fas fa-user-plus me-2"></i>إضافة مستخدم جديد
                             </a>
                         </div>
                     </div>
@@ -158,7 +156,7 @@
                     <div class="card-body">
                         <p class="card-text">عرض تقارير شاملة عن حالة المخزن والمبيعات</p>
                         <div class="button-group">
-                            <a class="btn btn-success" href="#">
+                            <a  asp-action="Index" asp-controller="Reports" class="btn btn-secondary mt-3">
                                 <i class="fas fa-chart-line me-2"></i>عرض التقارير
                             </a>
                         </div>
@@ -188,7 +186,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 col-sm-6 mb-3">
-                            <a class="quick-action-btn" asp-controller="Reports" asp-action="LowStock">
+                            <a class="quick-action-btn" asp-controller="AddItem" asp-action="LowStockItems">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 <span>مخزون منخفض</span>
                             </a>

@@ -2,9 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseApp.Data; // ← حسب مسار ملف DbContext
 using WarehouseApp.Models; // ← لو فيه Models تستخدمها في الاستعلام
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize(Roles = "Manager,Admin")]
 public class TransactionController : Controller
 {
+   
     private readonly WarehouseDbContext _context;
 
     public TransactionController(WarehouseDbContext context)

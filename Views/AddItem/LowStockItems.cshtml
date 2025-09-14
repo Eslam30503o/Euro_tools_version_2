@@ -1,0 +1,287 @@
+﻿@model IEnumerable<WarehouseApp.Models.Item>
+    @{
+    ViewData["Title"] = "الأصناف منخفضة المخزون";
+    }
+
+    <style>
+    .table th {
+        white-space: nowrap;
+        font-weight: 600;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+
+    .badge {
+        font-size: 0.8em;
+    }
+
+    @@media print {
+        .btn, .card-footer {
+            display: none !important;
+        }
+        .card {
+            box-shadow: none !important;
+            border: 1px solid #000 !important;
+        }
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .alert {
+        border: none;
+        border-radius: 8px;
+    }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            الأصناف منخفضة المخزون
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @if (Model != null && Model.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            تم العثور على <strong>@Model.Count()</strong> صنف منخفض المخزون يحتاج إلى إعادة ترتيب
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">
+                                            <i class="fas fa-barcode me-1"></i>
+                                            كود الصنف
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-box me-1"></i>
+                                            اسم الصنف
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-align-left me-1"></i>
+                                            الوصف
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-tags me-1"></i>
+                                            التصنيف
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-ruler me-1"></i>
+                                            الوحدة
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-level-down-alt me-1"></i>
+                                            الحد الأدنى
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-warehouse me-1"></i>
+                                            المخزون الحالي
+                                        </th>
+                                        <th scope="col">
+                                            <i class="fas fa-chart-line me-1"></i>
+                                            حالة المخزون
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        var stockLevel = item.CurrentStock <= (item.ReorderLevel * 0.5) ? "critical" : "warning";
+                                        var rowClass = stockLevel == "critical" ? "table-danger" : "table-warning";
+                                        var percentage = item.ReorderLevel > 0 ? Math.Round((double)item.CurrentStock / item.ReorderLevel * 100, 1) : 0;
+
+                                    <tr class="@rowClass">
+                                        <td class="fw-bold">@item.ItemCode</td>
+                                        <td>@item.ItemName</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Description))
+                                                {
+                                            <span title="@item.Description">
+                                                @(item.Description.Length > 30 ? item.Description.Substring(0, 30) + "..." : item.Description)
+                                            </span>
+                                                }
+                                                else
+                                                {
+                                            <span class="text-muted">لا يوجد وصف</span>
+                                                }
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                @(item.Category?.CategoryName ?? "غير محدد")
+                                            </span>
+                                        </td>
+                                        <td>@item.Unit</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-info">@item.ReorderLevel</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="fw-bold @(stockLevel == "critical" ? "text-danger" : "text-warning")">
+                                                @item.CurrentStock
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (stockLevel == "critical")
+                                                {
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                حرج (@percentage%)
+                                            </span>
+                                                }
+                                                else
+                                                {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                                منخفض (@percentage%)
+                                            </span>
+                                                }
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+ <!-- إحصائيات سريعة -->
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <div class="card bg-danger text-white">
+                                    <div class="card-body text-center">
+                                        <h5>مخزون حرج</h5>
+                                        <h2>@Model.Count(x => x.CurrentStock <= (x.ReorderLevel * 0.5))</h2>
+                                        <small>أصناف تحتاج ترتيب فوري</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-warning text-dark">
+                                    <div class="card-body text-center">
+                                        <h5>مخزون منخفض</h5>
+                                        <h2>@Model.Count(x => x.CurrentStock > (x.ReorderLevel * 0.5) && x.CurrentStock <= x.ReorderLevel)</h2>
+                                        <small>أصناف تحتاج متابعة</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h5>إجمالي الأصناف</h5>
+                                        <h2>@Model.Count()</h2>
+                                        <small>صنف منخفض المخزون</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success text-center" role="alert">
+                            <i class="fas fa-check-circle fa-3x mb-3"></i>
+                            <h4>ممتاز! لا توجد أصناف منخفضة المخزون</h4>
+                            <p class="mb-0">جميع الأصناف في مستوى آمن من المخزون</p>
+                        </div>
+                    }
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a asp-action="Index" asp-controller="Reports" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    رجوع للتقارير
+                                </a>
+                                @if (Model != null && Model.Any())
+                            {
+                                <button type="button" class="btn btn-success ms-2" onclick="exportToExcel()">
+                                    <i class="fas fa-file-excel me-2"></i>
+                                    تصدير Excel
+                                </button>
+                                <button type="button" class="btn btn-info ms-2" onclick="printReport()">
+                                    <i class="fas fa-print me-2"></i>
+                                    طباعة
+                                </button>
+                            }
+                            </div>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                آخر تحديث: @DateTime.Now.ToString("yyyy/MM/dd - HH:mm")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <script>
+        // وظيفة طباعة التقرير
+        function printReport() {
+            window.print();
+        }
+
+        // وظيفة تصدير Excel (تحتاج مكتبة إضافية مثل SheetJS)
+        function exportToExcel() {
+            // يمكن تنفيذها باستخدام مكتبة SheetJS أو إرسال طلب للخادم
+            alert('ستتم إضافة وظيفة التصدير قريباً');
+        }
+
+        // تحديث تلقائي كل 5 دقائق
+        setTimeout(function() {
+            location.reload();
+        }, 300000);
+        </script>
+    }
+
+        <style>
+        .table th {
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .badge {
+            font-size: 0.8em;
+        }
+
+        @@media print {
+            .btn, .card-footer {
+                display: none !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #000 !important;
+            }
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+        }
+        </style>
+    }
