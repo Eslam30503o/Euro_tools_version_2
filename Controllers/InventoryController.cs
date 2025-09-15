@@ -18,6 +18,17 @@ public class InventoryController : Controller
         _context = context;
     }
 
+    public async Task<IActionResult> ReorderAlerts()
+    {
+        var lowStockItems = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.SubCategory)
+            .Where(i => i.CurrentStock <= i.ReorderLevel)
+            .ToListAsync();
+
+        return View(lowStockItems);
+    }
+
     // هذه الدالة ستتعامل مع كل من الطلبات التي بها بحث والتي بدون بحث
     [HttpGet] // إضافة هذه السمة للتوضيح
     public async Task<IActionResult> Create(string SearchString)

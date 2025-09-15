@@ -3,10 +3,13 @@
     "",
     "\\Controllers",
     "\\Data",
+    "\\Models",
     "\\Views",
-    "\\Views\\Login",
-    "\\Views\\Shared"
+    "\\Views\\AddItem",
+    "\\Views\\Shared",
+    "\\wwwroot",
+    "\\wwwroot\\css"
   ],
-  "SelectedNode": "\\Views\\Shared\\_Layout.cshtml",
+  "SelectedNode": "\\Data\\WarehouseDbContext.cs",
   "PreviewInSolutionExplorer": false
 }

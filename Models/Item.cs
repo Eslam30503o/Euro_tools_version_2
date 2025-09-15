@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WarehouseApp.Models;
 
 namespace WarehouseApp.Models
 {
@@ -29,8 +30,12 @@ namespace WarehouseApp.Models
         
         public string? BarCode1 { get; set; }
 
+        public int? SubCategoryID { get; set; }
+        [ForeignKey("SubCategoryID")]
+        public SubCategory? SubCategory { get; set; }
+
         // علاقات
         public Category? Category { get; set; }
-        public ToolAttribute? ToolAttribute { get; set; }
+        public ToolAttribute ToolAttribute { get; set; }
     }
 }

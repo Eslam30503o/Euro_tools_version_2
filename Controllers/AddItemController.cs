@@ -25,39 +25,102 @@ namespace WarehouseApp.Controllers
         }
 
         // GET: AddItem
+        [HttpGet]
         public IActionResult Index()
         {
-            var categories = _context.Categories.ToList();
-            ViewBag.Categories = categories;
+            var model = new AddItemViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList()
+            };
 
-            return View();
+            return View(model);
+        }
+
+        [HttpGet("AddItem/GetSubCategories")]
+        public JsonResult GetSubCategories(int categoryId)
+        {
+            var subCategories = _context.SubCategories
+                .Where(s => s.CategoryID == categoryId)
+                .Select(s => new
+                {
+                    subCategoryID = s.SubCategoryID,
+                    subCategoryName = s.SubCategoryName,
+                    subCategoryCode = s.SubCategoryCode // ← أضف الكود هنا
+                })
+                .ToList();
+
+            return Json(subCategories);
         }
 
         // POST: AddItem
         [HttpPost]
-        public IActionResult Index(Item item)
+        [ValidateAntiForgeryToken] // ✅ مهم جداً للأمان
+        public async Task<IActionResult> Index(AddItemViewModel model)
         {
+            Console.WriteLine("Length = " + model.Item.ToolAttribute?.Length);
+
+            // 1. التحقق من صلاحية البيانات المدخلة في النموذج (Model)
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(item);
+                // لو النموذج غير صالح، أرجع لنفس الـ View مع البيانات المدخلة
+                // ولا تنسى إعادة تعبئة القوائم المنسدلة
+                model.Categories = await _context.Categories.ToListAsync();
+                model.SubCategories = await _context.SubCategories.ToListAsync();
+                return View(model);
             }
 
-            try
+            // 2. استخدم Transaction لضمان حفظ كل شيء أو لا شيء
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                _context.Items.Add(item);
-                _context.SaveChanges();
-                TempData["Success"] = "Item added successfully!";
-                return RedirectToAction("Index");
+                try
+                {
+                    // 3. أضف الـ Item للـ context
+                    _context.Items.Add(model.Item);
+
+                    // 4. لا تستخدم SaveChanges() هنا
+                    // انتظر حتى يتم إضافة كل شيء ثم احفظ الكل معًا
+                    await _context.SaveChangesAsync();
+                    // بعد الـ SaveChanges() الأول، الـ ItemID هيتولد تلقائيًا
+
+                    // 5. إذا كان هناك ToolAttribute، أضفه واربطه
+                    if (model.Item.ToolAttribute != null)
+                    {
+                        model.Item.ToolAttribute = model.ToolAttribute; // ✅ اربطها هنا
+                        model.Item.ToolAttribute.ItemID = model.Item.ItemID;
+                        _context.ToolAttributes.Add(model.Item.ToolAttribute);
+                    }
+
+
+                    await _context.SaveChangesAsync();
+
+                    // 8. لو كل شيء تمام، أكمل الـ Transaction
+                    await transaction.CommitAsync();
+
+                    TempData["Success"] = "تمت إضافة العنصر بنجاح.";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException ex)
+                {
+                    // لو فيه خطأ في الحفظ في قاعدة البيانات
+                    // (زي محاولة إضافة ItemCode موجود قبل كده)
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "خطأ أثناء حفظ البيانات: تأكد من أن رمز العنصر (Item Code) غير مكرر.");
+                }
+                catch (Exception ex)
+                {
+                    // لو فيه أي خطأ تاني
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "حدث خطأ غير متوقع: " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Error saving to database: " + ex.Message);
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(item);
-            }
+
+            // لو حصل أي خطأ في الـ try-catch block،
+            // أعد عرض الصفحة مع رسائل الخطأ.
+            model.Categories = await _context.Categories.ToListAsync();
+            model.SubCategories = await _context.SubCategories.ToListAsync();
+            return View(model);
         }
-
         // GET: AddItem/Import
         [HttpGet]
         public IActionResult Import()

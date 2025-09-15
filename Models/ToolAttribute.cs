@@ -1,23 +1,33 @@
-﻿// Models/ToolAttribute.cs
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseApp.Models
 {
     public class ToolAttribute
     {
-        [Key, ForeignKey("Item")]
-        public int ItemID { get; set; }  // نفس مفتاح الـ Item
+        [Key]  // هذا هو المفتاح الأساسي
+        [ForeignKey("Item")]  // وهو أيضًا مفتاح خارجي يشير إلى Item
+        public int ItemID { get; set; }
 
-        public decimal? Diameter { get; set; }     // Φ
-        public decimal? Radius { get; set; }       // R
-        public decimal? Length { get; set; }       // L
-        public decimal? Hardness { get; set; }     // H
-        public decimal? Pitch { get; set; }        // P (Thread)
-        public string MaterialType { get; set; }   // Reamer: مثل Carbide
-        public string LocalOrImported { get; set; }  // I or O
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Diameter { get; set; }
 
-        // Navigation property
-        public Item Item { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Radius { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Length { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Hardness { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Pitch { get; set; }
+
+        public string MaterialType { get; set; }
+
+        public string LocalOrImported { get; set; }
+
+        public Item Item { get; set; }  // Navigation property
     }
 }

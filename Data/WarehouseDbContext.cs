@@ -9,8 +9,8 @@ namespace WarehouseApp.Data
 		public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options)
 		{
 		}
-
-		public DbSet<User> Users { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<User> Users { get; set; }
 		public DbSet<Item> Items { get; set; }
 		public DbSet<ToolAttribute> ToolAttributes { get; set; }
 		public DbSet<Transaction> Transactions { get; set; }
@@ -37,6 +37,37 @@ namespace WarehouseApp.Data
 				.WithMany()
 				.HasForeignKey(t => t.UserID)
 				.OnDelete(DeleteBehavior.Restrict);
-		}
+
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ToolAttribute>()
+                .HasKey(t => t.ItemID);
+
+            modelBuilder.Entity<ToolAttribute>()
+                .Property(t => t.Diameter)
+                .HasColumnType("decimal(10,2)");
+
+            modelBuilder.Entity<ToolAttribute>()
+                .Property(t => t.Radius)
+                .HasColumnType("decimal(10,2)");
+
+            modelBuilder.Entity<ToolAttribute>()
+                .Property(t => t.Length)
+                .HasColumnType("decimal(10,2)");
+
+            modelBuilder.Entity<ToolAttribute>()
+                .Property(t => t.Hardness)
+                .HasColumnType("decimal(10,2)");
+
+            modelBuilder.Entity<ToolAttribute>()
+                .Property(t => t.Pitch)
+                .HasColumnType("decimal(10,2)");
+
+            // العلاقة 1:1 مع Item
+            modelBuilder.Entity<ToolAttribute>()
+                .HasOne(t => t.Item)
+                .WithOne(i => i.ToolAttribute)
+                .HasForeignKey<ToolAttribute>(t => t.ItemID);
+        }
 	}
 }

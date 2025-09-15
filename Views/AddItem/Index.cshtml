@@ -1,24 +1,20 @@
-﻿@model WarehouseApp.Models.Item
+﻿@model WarehouseApp.Models.AddItemViewModel
 @{
     ViewData["Title"] = "Add New Item";
 }
 
-<h1>Tools List</h1>
-<a asp-controller="AddItem" asp-action="Import" class="btn btn-success mb-3">Import</a>
-
-
-<div class="container-fluid">
-    <!-- Header Section -->
+<div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
                     <h1 class="display-5 text-primary mb-1">
                         <i class="fas fa-plus-circle me-3"></i>Add New Item
                     </h1>
                     <p class="text-muted mb-0">Create a new item in your warehouse inventory</p>
                 </div>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 mt-2 mt-md-0">
+                    <a asp-controller="AddItem" asp-action="Import" class="btn btn-success">Import</a>
                     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
                         <i class="fas fa-home me-2"></i>Home
                     </a>
@@ -30,7 +26,6 @@
         </div>
     </div>
 
-    <!-- Success Message -->
     @if (TempData["Success"] != null)
     {
     <div class="row mb-4">
@@ -44,7 +39,6 @@
     </div>
     }
 
-    <!-- Main Form Card -->
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
             <div class="card shadow-lg border-0">
@@ -56,9 +50,8 @@
                 <div class="card-body p-4">
                     <form asp-action="Index" method="post" id="addItemForm" novalidate>
                         <div class="row">
-                            <!-- Item Code -->
                             <div class="col-md-6 mb-3">
-                                <label for="ItemCode" class="form-label fw-semibold">
+                                <label asp-for="Item.ItemCode" class="form-label fw-semibold">
                                     <i class="fas fa-barcode me-1 text-primary"></i>Item Code
                                     <span class="text-danger">*</span>
                                 </label>
@@ -66,16 +59,15 @@
                                     <span class="input-group-text">
                                         <i class="fas fa-hashtag"></i>
                                     </span>
-                                    <input asp-for="ItemCode" type="text" class="form-control"
+                                    <input asp-for="Item.ItemCode" type="text" class="form-control"
                                            placeholder="Enter unique item code" required />
                                 </div>
-                                <span asp-validation-for="ItemCode" class="text-danger small"></span>
-                                <div class="form-text">Must be unique identifier for the item</div>
+                                <span asp-validation-for="Item.ItemCode" class="text-danger small"></span>
+                                <div class="form-text">Must be a unique identifier for the item</div>
                             </div>
 
-                            <!-- Item Name -->
                             <div class="col-md-6 mb-3">
-                                <label for="ItemName" class="form-label fw-semibold">
+                                <label asp-for="Item.ItemName" class="form-label fw-semibold">
                                     <i class="fas fa-tag me-1 text-primary"></i>Item Name
                                     <span class="text-danger">*</span>
                                 </label>
@@ -83,47 +75,46 @@
                                     <span class="input-group-text">
                                         <i class="fas fa-box"></i>
                                     </span>
-                                    <input asp-for="ItemName" type="text" class="form-control"
+                                    <input asp-for="Item.ItemName" type="text" class="form-control"
                                            placeholder="Enter item name" required />
                                 </div>
-                                <span asp-validation-for="ItemName" class="text-danger small"></span>
+                                <span asp-validation-for="Item.ItemName" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <!-- Description -->
                         <div class="mb-3">
-                            <label for="Description" class="form-label fw-semibold">
+                            <label asp-for="Item.Description" class="form-label fw-semibold">
                                 <i class="fas fa-align-left me-1 text-primary"></i>Description
                             </label>
-                            <textarea asp-for="Description" class="form-control" rows="3"
+                            <textarea asp-for="Item.Description" class="form-control" rows="3"
                                       placeholder="Enter item description (optional)"></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
-                            <div class="form-text">Provide detailed description of the item</div>
+                            <span asp-validation-for="Item.Description" class="text-danger small"></span>
+                            <div class="form-text">Provide a detailed description of the item</div>
                         </div>
 
                         <div class="row">
-                            <!-- Category -->
                             <div class="col-md-6 mb-3">
-                                <label for="CategoryID" class="form-label fw-semibold">
+                                <label asp-for="Item.CategoryID" class="form-label fw-semibold">
                                     <i class="fas fa-folder me-1 text-primary"></i>Category
+                                    <span class="text-danger">*</span>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">
                                         <i class="fas fa-list"></i>
                                     </span>
-                                    <select asp-for="CategoryID" class="form-select">
+                                    <select asp-for="Item.CategoryID" class="form-select" id="Item_CategoryID" required>
                                         <option value="" selected>Select Category</option>
-                                        @if (ViewBag.Categories != null)
+                                        @if (Model.Categories != null)
                                         {
-                                            foreach (var category in ViewBag.Categories)
+                                        @foreach (var category in Model.Categories)
                                             {
                                         <option value="@category.CategoryID">@category.CategoryName</option>
                                             }
                                         }
                                     </select>
                                 </div>
-                                <span asp-validation-for="CategoryID" class="text-danger small"></span>
-                                @if (ViewBag.Categories == null || !((IEnumerable<dynamic>)ViewBag.Categories).Any())
+                                <span asp-validation-for="Item.CategoryID" class="text-danger small"></span>
+                                @if (Model.Categories == null || !Model.Categories.Any())
                                 {
                                 <div class="form-text text-warning">
                                     <i class="fas fa-exclamation-triangle me-1"></i>
@@ -132,9 +123,27 @@
                                 }
                             </div>
 
-                            <!-- Unit -->
                             <div class="col-md-6 mb-3">
-                                <label for="Unit" class="form-label fw-semibold">
+                                <label asp-for="Item.SubCategoryID" class="form-label fw-semibold">Subcategory</label>
+                                <select asp-for="Item.SubCategoryID" id="Item_SubCategoryID" class="form-select">
+                                    <option value="">Select Subcategory</option>
+                                    @if (Model.SubCategories != null)
+                                    {
+                                    @foreach (var sub in Model.SubCategories)
+                                        {
+                                    <option value="@sub.SubCategoryID" data-code="@sub.SubCategoryCode">
+                                        @sub.SubCategoryName (@sub.SubCategoryCode)
+                                    </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="Item.SubCategoryID" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Item.Unit" class="form-label fw-semibold">
                                     <i class="fas fa-ruler me-1 text-primary"></i>Unit
                                     <span class="text-danger">*</span>
                                 </label>
@@ -142,26 +151,24 @@
                                     <span class="input-group-text">
                                         <i class="fas fa-balance-scale"></i>
                                     </span>
-                                    <input asp-for="Unit" type="text" class="form-control"
+                                    <input asp-for="Item.Unit" type="text" class="form-control"
                                            placeholder="e.g., pcs, kg, liter" required list="unitSuggestions" />
                                 </div>
                                 <datalist id="unitSuggestions">
                                     <option value="pcs">Pieces</option>
                                     <option value="kg">Kilograms</option>
                                     <option value="g">Grams</option>
+                                    <option value="M">Meter</option>
                                     <option value="liter">Liters</option>
                                     <option value="ml">Milliliters</option>
                                     <option value="box">Boxes</option>
                                     <option value="set">Sets</option>
                                 </datalist>
-                                <span asp-validation-for="Unit" class="text-danger small"></span>
+                                <span asp-validation-for="Item.Unit" class="text-danger small"></span>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <!-- Reorder Level -->
                             <div class="col-md-6 mb-3">
-                                <label for="ReorderLevel" class="form-label fw-semibold">
+                                <label asp-for="Item.ReorderLevel" class="form-label fw-semibold">
                                     <i class="fas fa-exclamation-triangle me-1 text-warning"></i>Reorder Level
                                     <span class="text-danger">*</span>
                                 </label>
@@ -169,32 +176,30 @@
                                     <span class="input-group-text">
                                         <i class="fas fa-bell"></i>
                                     </span>
-                                    <input asp-for="ReorderLevel" type="number" class="form-control"
+                                    <input asp-for="Item.ReorderLevel" type="number" class="form-control"
                                            placeholder="Minimum stock level" min="0" required />
                                 </div>
-                                <span asp-validation-for="ReorderLevel" class="text-danger small"></span>
+                                <span asp-validation-for="Item.ReorderLevel" class="text-danger small"></span>
                                 <div class="form-text">Alert when stock falls below this level</div>
-                            </div>
-
-                            <!-- Current Stock -->
-                            <div class="col-md-6 mb-3">
-                                <label for="CurrentStock" class="form-label fw-semibold">
-                                    <i class="fas fa-cubes me-1 text-success"></i>Current Stock
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-warehouse"></i>
-                                    </span>
-                                    <input asp-for="CurrentStock" type="number" class="form-control"
-                                           placeholder="Initial stock quantity" min="0" required />
-                                </div>
-                                <span asp-validation-for="CurrentStock" class="text-danger small"></span>
-                                <div class="form-text">Current available quantity</div>
                             </div>
                         </div>
 
-                        <!-- Stock Level Indicator -->
+                        <div class="mb-3">
+                            <label asp-for="Item.CurrentStock" class="form-label fw-semibold">
+                                <i class="fas fa-cubes me-1 text-success"></i>Current Stock
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-warehouse"></i>
+                                </span>
+                                <input asp-for="Item.CurrentStock" type="number" class="form-control"
+                                       placeholder="Initial stock quantity" min="0" required />
+                            </div>
+                            <span asp-validation-for="Item.CurrentStock" class="text-danger small"></span>
+                            <div class="form-text">Current available quantity</div>
+                        </div>
+
                         <div class="mb-4">
                             <div class="card bg-light">
                                 <div class="card-body py-2">
@@ -207,7 +212,64 @@
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
+                        <div id="technicalFields" class="border rounded p-3 mb-4 d-none">
+                            <h5 class="text-primary mb-3"><i class="fas fa-cogs me-2"></i>Technical Specifications</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3 technical-field" data-field="Length">
+                                    <label asp-for="Item.ToolAttribute.Length" class="form-label">Length L (mm)<span class="text-danger">*</span></label>
+                                    <input asp-for="Item.ToolAttribute.Length" type="number" class="form-control" step="0.01" />
+                                    <span asp-validation-for="Item.ToolAttribute.Length" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="Diameter">
+                                    <label asp-for="Item.ToolAttribute.Diameter" class="form-label">Diameter Φ (mm) <span class="text-danger">*</span></label>
+                                    <input asp-for="Item.ToolAttribute.Diameter" type="number" class="form-control" step="0.01" />
+                                    <span asp-validation-for="Item.ToolAttribute.Diameter" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="Radius">
+                                    <label asp-for="Item.ToolAttribute.Radius" class="form-label">Radius R (mm)</label>
+                                    <input type="hidden" asp-for="Item.ToolAttribute.Radius" id="RadiusFinal" />
+                                    <div id="radiusInputContainer" class="input-group">
+                                        <input type="number" step="0.01" class="form-control radius-manual" id="RadiusManual" placeholder="Enter radius" />
+                                        <select class="form-select radius-select d-none" id="RadiusSelect">
+                                            <option value="">Select Radius</option>
+                                            <option value="2">2</option>
+                                            <option value="3.5">3.5</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Item.ToolAttribute.Radius" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="Hardness">
+                                    <label asp-for="Item.ToolAttribute.Hardness" class="form-label">Hardness H <span class="text-danger">*</span></label>
+                                    <input asp-for="Item.ToolAttribute.Hardness" type="number" class="form-control" step="0.01" />
+                                    <span asp-validation-for="Item.ToolAttribute.Hardness" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="MaterialType">
+                                    <label asp-for="Item.ToolAttribute.MaterialType" class="form-label">Kind (Carbide or HSS) <span class="text-danger">*</span></label>
+                                    <select asp-for="Item.ToolAttribute.MaterialType" class="form-select">
+                                        <option value="">Select Kind</option>
+                                        <option value="Carbide">Carbide</option>
+                                        <option value="HSS">HSS</option>
+                                    </select>
+                                    <span asp-validation-for="Item.ToolAttribute.MaterialType" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="Pitch">
+                                    <label asp-for="Item.ToolAttribute.Pitch" class="form-label">Pitch (P) <span class="text-danger">*</span></label>
+                                    <input asp-for="Item.ToolAttribute.Pitch" type="number" class="form-control" step="0.01" />
+                                    <span asp-validation-for="Item.ToolAttribute.Pitch" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3 technical-field" data-field="LocalOrImported">
+                                    <label asp-for="Item.ToolAttribute.LocalOrImported" class="form-label">Origin</label>
+                                    <select asp-for="Item.ToolAttribute.LocalOrImported" class="form-select">
+                                        <option value="">Select</option>
+                                        <option value="Local">Local</option>
+                                        <option value="Imported">Imported</option>
+                                    </select>
+                                    <span asp-validation-for="Item.ToolAttribute.LocalOrImported" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-flex justify-content-end gap-2">
                             <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
                                 <i class="fas fa-undo me-2"></i>Reset Form
@@ -223,7 +285,6 @@
         </div>
     </div>
 
-    <!-- Additional Info Card -->
     <div class="row mt-4">
         <div class="col-12">
             <div class="card border-info">
@@ -234,7 +295,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
                             <div class="d-flex">
                                 <i class="fas fa-barcode text-primary me-3 mt-1"></i>
                                 <div>
@@ -243,7 +304,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
                             <div class="d-flex">
                                 <i class="fas fa-exclamation-triangle text-warning me-3 mt-1"></i>
                                 <div>
@@ -364,165 +425,125 @@
     }
 </style>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('addItemForm');
-        const currentStockInput = document.getElementById('CurrentStock');
-        const reorderLevelInput = document.getElementById('ReorderLevel');
-        const stockStatus = document.getElementById('stockStatus');
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const spinner = document.getElementById('submitSpinner');
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Define rules for each subcategory code
+            const fieldRules = {
+                "E": { required: ["Diameter", "Length", "Hardness", "LocalOrImported"], optional: ["Radius"], radiusInputType: 'manual' },
+                "B": { required: ["Diameter", "Length", "Hardness", "LocalOrImported"], optional: [], radiusInputType: 'manual' },
+                "D": { required: ["Diameter", "Length", "Hardness", "LocalOrImported"], optional: [], radiusInputType: 'manual' },
+                "M": { required: ["Diameter", "Pitch", "Length", "LocalOrImported"], optional: [], radiusInputType: 'manual' },
+                "R": { required: ["Radius", "MaterialType"], optional: [], radiusInputType: 'manual' },
+                "I": { required: ["Radius"], optional: [], radiusInputType: 'dropdown' },
+                "S": { required: ["Diameter", "Radius"], optional: ["Length"], radiusInputType: 'dropdown', specialRules: { length: 'conditional' } }
+            };
 
-        // Real-time stock status update
-        function updateStockStatus() {
-            const currentStock = parseInt(currentStockInput.value) || 0;
-            const reorderLevel = parseInt(reorderLevelInput.value) || 0;
+            // Function to handle the visibility and requirement of technical fields
+            function showFields(code) {
+                const config = fieldRules[code];
 
-            if (currentStock === 0 && reorderLevel === 0) {
-                stockStatus.textContent = 'Enter stock values';
-                stockStatus.className = 'badge bg-secondary ms-2';
-                return;
-            }
+                // Hide all technical fields and remove 'required' attributes
+                $('.technical-field').hide().find('input, select').removeAttr('required').val('');
+                $('#technicalFields').addClass('d-none');
 
-            if (currentStock <= reorderLevel) {
-                stockStatus.textContent = 'Low Stock Alert';
-                stockStatus.className = 'badge bg-danger ms-2';
-            } else if (currentStock <= reorderLevel * 2) {
-                stockStatus.textContent = 'Medium Stock';
-                stockStatus.className = 'badge bg-warning ms-2';
-            } else {
-                stockStatus.textContent = 'Good Stock Level';
-                stockStatus.className = 'badge bg-success ms-2';
-            }
-        }
+                if (!config) return;
 
-        // Event listeners for real-time updates
-        currentStockInput.addEventListener('input', updateStockStatus);
-        reorderLevelInput.addEventListener('input', updateStockStatus);
+                // Show the main technical fields container
+                $('#technicalFields').removeClass('d-none');
 
-        // Form validation
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
+                // Show required and optional fields and set 'required' for required ones
+                [...config.required, ...config.optional].forEach(field => {
+                    const fieldDiv = $('[data-field="' + field + '"]');
+                    fieldDiv.show();
+                    if (config.required.includes(field)) {
+                        fieldDiv.find('input, select').attr('required', true);
+                    }
+                });
 
-            if (validateForm()) {
-                showSubmitSpinner();
-                // Submit the form
-                this.submit();
-            }
-        });
-
-        function validateForm() {
-            let isValid = true;
-            const requiredFields = form.querySelectorAll('[required]');
-
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
+                // Handle Radius input type toggle
+                if (config.radiusInputType === 'dropdown') {
+                    $('#RadiusSelect').show().attr('required', true).removeClass('d-none');
+                    $('#RadiusManual').hide().removeAttr('required').addClass('d-none');
                 } else {
-                    field.classList.remove('is-invalid');
-                    field.classList.add('is-valid');
+                    $('#RadiusSelect').hide().removeAttr('required').addClass('d-none');
+                    $('#RadiusManual').show().attr('required', true).removeClass('d-none');
                 }
+
+                // Handle special conditional rules, like for "Shells" (S)
+                if (code === "S" && config.specialRules.length === 'conditional') {
+                    const diaInput = $('[name="ToolAttribute.Diameter"]');
+                    const lengthField = $('[data-field="Length"]');
+
+                    diaInput.on('input', function () {
+                        if (parseFloat(this.value) === 15) {
+                            lengthField.show().find('input').attr('required', true);
+                        } else {
+                            lengthField.hide().find('input').removeAttr('required');
+                        }
+                    }).trigger('input'); // Trigger on load
+                }
+
+                // Update the hidden Radius field
+                updateRadiusFinalValue();
+            }
+
+            // Function to update the hidden Radius field with the correct value
+            function updateRadiusFinalValue() {
+                const code = $('#Item_SubCategoryID').find(':selected').data('code');
+                const config = fieldRules[code];
+
+                if (!config) return;
+
+                if (config.radiusInputType === 'dropdown') {
+                    $('#RadiusFinal').val($('#RadiusSelect').val());
+                } else {
+                    $('#RadiusFinal').val($('#RadiusManual').val());
+                }
+            }
+
+            // Event handlers
+            $('#Item_SubCategoryID').on('change', function () {
+                const code = $(this).find(':selected').data('code');
+                showFields(code);
             });
 
-            // Custom validations
-            const itemCode = document.getElementById('ItemCode');
-            if (itemCode.value.length < 2) {
-                itemCode.classList.add('is-invalid');
-                isValid = false;
-            }
+            $('#RadiusManual, #RadiusSelect').on('input change', updateRadiusFinalValue);
 
-            const currentStock = parseInt(currentStockInput.value);
-            const reorderLevel = parseInt(reorderLevelInput.value);
-
-            if (currentStock < 0) {
-                currentStockInput.classList.add('is-invalid');
-                isValid = false;
-            }
-
-            if (reorderLevel < 0) {
-                reorderLevelInput.classList.add('is-invalid');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        function showSubmitSpinner() {
-            spinner.classList.remove('d-none');
-            submitBtn.disabled = true;
-        }
-
-        // Auto-generate item code suggestion
-        const itemNameInput = document.getElementById('ItemName');
-        const itemCodeInput = document.getElementById('ItemCode');
-
-        itemNameInput.addEventListener('input', function () {
-            if (!itemCodeInput.value) {
-                const suggestion = generateItemCodeSuggestion(this.value);
-                itemCodeInput.placeholder = `Suggestion: ${suggestion}`;
-            }
+            // Re-trigger the change on page load to initialize the correct fields
+            $('#Item_SubCategoryID').trigger('change');
         });
 
-        function generateItemCodeSuggestion(itemName) {
-            if (!itemName) return 'Enter unique item code';
-
-            const words = itemName.trim().split(' ');
-            let suggestion = '';
-
-            if (words.length === 1) {
-                suggestion = words[0].substring(0, 4).toUpperCase();
-            } else {
-                suggestion = words.map(word => word.charAt(0)).join('').toUpperCase();
-            }
-
-            suggestion += Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            return suggestion;
-        }
-
-        // Item code format validation
-        itemCodeInput.addEventListener('input', function () {
-            this.value = this.value.toUpperCase();
-        });
-    });
-
-    function resetForm() {
-        if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+        // Other utility functions
+        function resetForm() {
             document.getElementById('addItemForm').reset();
-            document.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
-                el.classList.remove('is-valid', 'is-invalid');
-            });
-            document.getElementById('stockStatus').textContent = 'Enter stock values';
-            document.getElementById('stockStatus').className = 'badge bg-secondary ms-2';
+            // Manually re-trigger the change event to reset dynamic fields
+            $('#Item_SubCategoryID').trigger('change');
+            // Hide the technical fields section completely on reset
+            $('#technicalFields').addClass('d-none');
+            // Also reset the stock status badge
+            $('#stockStatus').removeClass('bg-success bg-warning bg-danger').addClass('bg-secondary').text('Enter stock values');
         }
-    }
 
-    // Auto-save to localStorage (optional)
-    function autoSave() {
-        const formData = new FormData(document.getElementById('addItemForm'));
-        const data = Object.fromEntries(formData);
-        localStorage.setItem('addItemFormData', JSON.stringify(data));
-    }
+        // Live stock status update
+        $('#Item_CurrentStock, #Item_ReorderLevel').on('input', function () {
+            const currentStock = parseInt($('#Item_CurrentStock').val());
+            const reorderLevel = parseInt($('#Item_ReorderLevel').val());
+            const statusBadge = $('#stockStatus');
 
-    // Load saved data on page load
-    function loadSavedData() {
-        const saved = localStorage.getItem('addItemFormData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            Object.keys(data).forEach(key => {
-                const field = document.getElementById(key);
-                if (field && data[key]) {
-                    field.value = data[key];
-                }
-            });
-        }
-    }
+            statusBadge.removeClass('bg-secondary bg-success bg-warning bg-danger');
 
-    // Clear saved data on successful submit
-    window.addEventListener('beforeunload', function () {
-        const form = document.getElementById('addItemForm');
-        if (form && !form.querySelector('.spinner-border:not(.d-none)')) {
-            autoSave();
-        }
-    });
-</script>
+            if (isNaN(currentStock) || isNaN(reorderLevel)) {
+                statusBadge.addClass('bg-secondary').text('Enter stock values');
+            } else if (currentStock <= reorderLevel) {
+                statusBadge.addClass('bg-danger').text('Low Stock');
+            } else if (currentStock > reorderLevel && currentStock <= reorderLevel * 2) {
+                statusBadge.addClass('bg-warning').text('Medium Stock');
+            } else {
+                statusBadge.addClass('bg-success').text('In Stock');
+            }
+        });
+    </script>
+}

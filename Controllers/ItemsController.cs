@@ -27,8 +27,10 @@ namespace WarehouseApp.Controllers
         public async Task<IActionResult> Index()
         {
             var items = await _context.Items
-                .Include(i => i.Category)
-                .ToListAsync();
+    .Include(i => i.Category)
+    .Include(i => i.SubCategory)     // اضيف SubCategory
+    .Include(i => i.ToolAttribute)   // لو عايز تعرض بيانات الأدوات
+    .ToListAsync();
 
             return View(items);
         }
