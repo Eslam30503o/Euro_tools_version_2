@@ -22,8 +22,8 @@ public class ToolCreateViewModel
     public decimal? Length { get; set; }
     public decimal? Hardness { get; set; }
     public decimal? Pitch { get; set; }
-    public string? MaterialType { get; set; }
-    public string LocalOrImported { get; set; }
+    public string? Material { get; set; }
+    public string? Source { get; set; }
 
     // Lists for dropdowns
     public IEnumerable<Category> Categories { get; set; }

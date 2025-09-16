@@ -1,13 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WarehouseApp.Models
 {
     public class ToolAttribute
     {
-        [Key]  // هذا هو المفتاح الأساسي
-        [ForeignKey("Item")]  // وهو أيضًا مفتاح خارجي يشير إلى Item
-        public int ItemID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // ✅ تأكيد أن SQL مسؤول عن التوليد
+        [BindNever]
+        public int ToolAttrID { get; set; } // مفتاح أساسي
+
+        [Required]
+        public int ItemID { get; set; } // مفتاح خارجي
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? Diameter { get; set; }
@@ -24,10 +29,11 @@ namespace WarehouseApp.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal? Pitch { get; set; }
 
-        public string MaterialType { get; set; }
+        public string? Source { get; set; }
 
-        public string LocalOrImported { get; set; }
+        public string? Material { get; set; }
 
-        public Item Item { get; set; }  // Navigation property
+        // Navigation property
+        public Item? Item { get; set; }
     }
 }

@@ -92,14 +92,14 @@
 
         <!-- نوع المادة -->
         <div class="col-md-3 mb-3">
-            <label asp-for="MaterialType" class="form-label">نوع المادة</label>
-            <input asp-for="MaterialType" class="form-control" />
+            <label asp-for="Material" class="form-label">نوع المادة</label>
+            <input asp-for="Material" class="form-control" />
         </div>
 
         <!-- المصدر -->
         <div class="col-md-3 mb-3">
-            <label asp-for="LocalOrImported" class="form-label">المصدر</label>
-            <select asp-for="LocalOrImported" class="form-control">
+            <label asp-for="Source" class="form-label">المصدر</label>
+            <select asp-for="Source" class="form-control">
                 <option value="">اختر</option>
                 <option value="I">محلي</option>
                 <option value="O">مستورد</option>
@@ -118,13 +118,14 @@
         <a asp-action="Index" class="btn btn-secondary">↩ رجوع</a>
     </div>
 </form>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
             $('#CategoryID').change(function () {
                 var categoryId = $(this).val();
 
-                $('#SubCategoryID').empty(); // فضي الدروب داون
+                $('#SubCategoryID').empty();
 
                 if (categoryId) {
                     $.get('/Tool/GetSubCategories?categoryId=' + categoryId, function (data) {
@@ -137,33 +138,28 @@
                     $('#SubCategoryID').append('<option value="">اختر التصنيف الفرعي</option>');
                 }
             });
-        });
-    </script>
-}
-@section Scripts {
-    <script>
-        function generateBarcode() {
-            var diameter = $('#Diameter').val();
-            var radius = $('#Radius').val();
-            var length = $('#Length').val();
-            var hardness = $('#Hardness').val();
-            var source = $('#LocalOrImported').val(); // I or O
 
-            var code = "E"; // مثال: Endmill تبدأ بـ E
-            if (diameter) code += diameter;
-            if (radius) code += "R" + radius;
-            if (length) code += "L" + length;
-            if (hardness) code += "H" + hardness;
-            if (source) code += source;
-
-            $('#GeneratedBarCode').val(code);
-        }
-
-        $(document).ready(function () {
-            $('#Diameter, #Radius, #Length, #Hardness, #LocalOrImported').on('input change', function () {
+            // Barcode generation
+            $('#Diameter, #Radius, #Length, #Hardness, #Source').on('input change', function () {
                 generateBarcode();
             });
+
+            function generateBarcode() {
+                var diameter = $('#Diameter').val();
+                var radius = $('#Radius').val();
+                var length = $('#Length').val();
+                var hardness = $('#Hardness').val();
+                var source = $('#Source').val();
+
+                var code = "E";
+                if (diameter) code += diameter;
+                if (radius) code += "R" + radius;
+                if (length) code += "L" + length;
+                if (hardness) code += "H" + hardness;
+                if (source) code += source;
+
+                $('#GeneratedBarCode').val(code);
+            }
         });
     </script>
 }
-

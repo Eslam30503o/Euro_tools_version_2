@@ -101,8 +101,8 @@ namespace WarehouseApp.Controllers
                 Length = model.Length,
                 Hardness = model.Hardness,
                 Pitch = model.Pitch,
-                MaterialType = model.MaterialType,
-                LocalOrImported = model.LocalOrImported
+                Material = model.Material,
+                Source = model.Source
             };
 
             _context.ToolAttributes.Add(toolAttr);

@@ -1,15 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Controllers",
-    "\\Data",
     "\\Models",
     "\\Views",
-    "\\Views\\AddItem",
-    "\\Views\\Shared",
-    "\\wwwroot",
-    "\\wwwroot\\css"
+    "\\Views\\AddItem"
   ],
-  "SelectedNode": "\\Data\\WarehouseDbContext.cs",
+  "SelectedNode": "\\Models\\SubCategory.cs",
   "PreviewInSolutionExplorer": false
 }

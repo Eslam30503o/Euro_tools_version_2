@@ -1,20 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Controllers/ItemsController.cs
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarehouseApp.Data;
 using WarehouseApp.Models;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using WarehouseApp.Models;
-using CsvHelper;
-using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
-    [Authorize(Roles = "Manager,Admin")]
     public class ItemsController : Controller
     {
         private readonly WarehouseDbContext _context;
@@ -24,16 +15,45 @@ namespace WarehouseApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // GET: Items/Create
+        public IActionResult Create()
         {
-            var items = await _context.Items
-    .Include(i => i.Category)
-    .Include(i => i.SubCategory)     // اضيف SubCategory
-    .Include(i => i.ToolAttribute)   // لو عايز تعرض بيانات الأدوات
-    .ToListAsync();
+            var model = new AddItemViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList()
+            };
+            return View(model);
+        }
 
+        // POST: Items/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AddItemViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Categories = _context.Categories.ToList();
+                model.SubCategories = _context.SubCategories.ToList();
+                return View(model);
+            }
+
+            _context.Items.Add(model.Item);
+            await _context.SaveChangesAsync();
+
+            model.ToolAttribute.ItemID = model.Item.ItemID;
+            _context.ToolAttributes.Add(model.ToolAttribute);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Index (للتجربة)
+        public IActionResult Index()
+        {
+            var items = _context.Items.Include(i => i.ToolAttribute).ToList();
             return View(items);
         }
-        
     }
 }

@@ -36,6 +36,6 @@ namespace WarehouseApp.Models
 
         // علاقات
         public Category? Category { get; set; }
-        public ToolAttribute ToolAttribute { get; set; }
+        public ToolAttribute? ToolAttribute { get; set; }
     }
 }
