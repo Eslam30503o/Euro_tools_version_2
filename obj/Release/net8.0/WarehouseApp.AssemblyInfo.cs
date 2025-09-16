@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WarehouseApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< Updated upstream
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ab52d8feb923b46b39ba3bcb78085257dd44d87")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b43e110ef43eb355df056372f2e70c0bf20e183c")]
+>>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("WarehouseApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WarehouseApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

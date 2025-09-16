@@ -17,6 +17,8 @@ namespace WarehouseApp.Models
         public string MaterialType { get; set; }   // Reamer: مثل Carbide
         public string LocalOrImported { get; set; }  // I or O
 
+        //public string? Type { get; set; }
+
         // Navigation property
         public Item Item { get; set; }
     }

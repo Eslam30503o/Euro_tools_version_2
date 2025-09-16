@@ -1,0 +1,324 @@
+﻿@model WarehouseApp.Models.AddItemViewModel
+
+@{
+    ViewData["Title"] = "إضافة منتج جديد";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-box me-2"></i>إضافة منتج جديد
+            </h3>
+        </div>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            }
+
+            <form asp-action="Create" asp-controller="AddItem" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <h5 class="mb-3">معلومات المنتج الأساسية</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Item.ItemCode" class="form-label">كود المنتج <span class="text-danger">*</span></label>
+                        <input asp-for="Item.ItemCode" class="form-control" />
+                        <span asp-validation-for="Item.ItemCode" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Item.ItemName" class="form-label">اسم المنتج <span class="text-danger">*</span></label>
+                        <input asp-for="Item.ItemName" class="form-control" />
+                        <span asp-validation-for="Item.ItemName" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="Item.Description" class="form-label">الوصف</label>
+                        <textarea asp-for="Item.Description" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="Item.Description" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Item.Unit" class="form-label">الوحدة <span class="text-danger">*</span></label>
+                        <span asp-validation-for="Item.Unit" class="invalid-feedback d-block"></span>
+                        <select asp-for="Item.Unit" class="form-select">
+                            <option value="">-- اختر نوع الوحده --</option>
+                            <option value="قطعة">قطعة</option>
+                            <option value="كجم(Kg)">كجم(Kg)</option>
+                            <option value="جرام(g)">جرام(g)</option>
+                            <option value="متر(M)">متر(M)</option>
+                            <option value="سم(CM)">سم(CM)</option>
+                            <option value="ملي متر (MM)">ملي متر (MM)</option>
+                            <option value="لتر(L)">لتر(L)</option>
+                            <option value="جالون">جالون</option>
+                            <option value="برميل">برميل</option>
+                            <option value="كرتونة">كرتونة</option>
+                            <option value="أخري">أخري</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label asp-for="Item.ReorderLevel" class="form-label">حد إعادة الطلب</label>
+                        <input asp-for="Item.ReorderLevel" type="number" min="0" class="form-control" />
+                        <span asp-validation-for="Item.ReorderLevel" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Item.CurrentStock" class="form-label">الكمية الحالية</label>
+                        <input asp-for="Item.CurrentStock" type="number" min="0" class="form-control" />
+                        <span asp-validation-for="Item.CurrentStock" class="invalid-feedback d-block"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Item.CategoryID" class="form-label">التصنيف الرئيسي <span class="text-danger">*</span></label>
+                        <span asp-validation-for="Item.CategoryID" class="invalid-feedback d-block"></span>
+                        <select asp-for="Item.CategoryID" class="form-select" id="CategoryID">
+                            <option value="">اختر التصنيف الرئيسي</option>
+                            @foreach (var c in Model.Categories)
+                            {
+                            <option value="@c.CategoryID">@c.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Item.SubCategoryID" class="form-label">التصنيف الفرعي <span class="text-danger">*</span></label>
+                        <span asp-validation-for="Item.SubCategoryID" class="invalid-feedback d-block"></span>
+                        <select asp-for="Item.SubCategoryID" class="form-control" id="Item_SubCategoryID">
+                            <option value="">-- اختر تصنيف فرعي --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Item.Type" class="form-label">نوع المنتج <span class="text-danger">*</span></label>
+                        <span asp-validation-for="Item.Type" class="invalid-feedback d-block"></span>
+                        <select asp-for="Item.Type" class="form-select">
+                            <option value="">-- اختر نوع المنتج --</option>
+                            <option value="عدة">عدة</option>
+                            <option value="خامة">خامة</option>
+                            <option value="قطع غيار">قطع غيار</option>
+                            <option value="زيوت و شحوم">زيوت و شحوم </option>
+                            <option value="مكينات">مكينات</option>
+                            <option value="أخري">أخري</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <h5 class="mb-3">مواصفات الأداة</h5>
+                <div class="row g-3">
+                    <div class="col-md-4 form-group" id="group-Diameter">
+                        <label for="Diameter" class="form-label">Φ (Diameter)</label>
+                        <input asp-for="ToolAttribute.Diameter" class="form-control" id="Diameter" />
+                        <span asp-validation-for="ToolAttribute.Diameter" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Radius">
+                        <label for="Radius" class="form-label">R (Radius)</label>
+                        <input asp-for="ToolAttribute.Radius" class="form-control" id="Radius" />
+                        <span asp-validation-for="ToolAttribute.Radius" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Length">
+                        <label for="Length" class="form-label">L (Length)</label>
+                        <input asp-for="ToolAttribute.Length" class="form-control" id="Length" />
+                        <span asp-validation-for="ToolAttribute.Length" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Hardness">
+                        <label for="Hardness" class="form-label">H (Hardness)</label>
+                        <input asp-for="ToolAttribute.Hardness" class="form-control" id="Hardness" />
+                        <span asp-validation-for="ToolAttribute.Hardness" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Pitch">
+                        <label for="Pitch" class="form-label">Pitch</label>
+                        <input asp-for="ToolAttribute.Pitch" class="form-control" id="Pitch" />
+                        <span asp-validation-for="ToolAttribute.Pitch" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Source">
+                        <label for="Source" class="form-label">المصدر (محلي / مستورد) <span class="text-danger">*</span></label>
+                        <select asp-for="ToolAttribute.Source" class="form-select" id="Source">
+                            <option value="">اختر المصدر</option>
+                            <option value="I">محلي</option>
+                            <option value="O">مستورد</option>
+                        </select>
+                        <span asp-validation-for="ToolAttribute.Source" class="invalid-feedback d-block"></span>
+                    </div>
+                    <div class="col-md-4 form-group" id="group-Material">
+                        <label for="Material" class="form-label">المادة</label>
+                        <input asp-for="ToolAttribute.Material" class="form-control" id="Material" />
+                        <span asp-validation-for="ToolAttribute.Material" class="invalid-feedback d-block"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        حفظ المنتج
+                    </button>
+                    <a asp-action="Index" asp-controller="Items" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const allSubCategories = @Html.Raw(Json.Serialize(Model.SubCategories));
+        const fields = ['Diameter', 'Radius', 'Length', 'Hardness', 'Pitch', 'Source', 'Material'];
+
+        function hideGroup(id) {
+            $('#group-' + id).hide();
+            $('#' + id).prop('required', false).val('');
+        }
+
+        function showGroup(id, required = false) {
+            $('#group-' + id).show();
+            $('#' + id).prop('required', required);
+        }
+
+        function resetFields() {
+            fields.forEach(f => hideGroup(f));
+        }
+
+        function setMaterialOptions(options) {
+            const materialGroup = $('#group-Material');
+            let materialField = $('#Material');
+
+            if (materialField.prop('tagName') === 'INPUT') {
+                materialField.replaceWith(`<select id="Material" name="ToolAttribute.Material" class="form-select"></select>`);
+                materialField = $('#Material');
+            }
+
+            materialField.empty().append('<option value="">اختر المادة</option>');
+            options.forEach(opt => materialField.append(`<option value="${opt}">${opt}</option>`));
+
+            materialGroup.show();
+            materialField.prop('required', true);
+        }
+
+        function setRadiusOptions(options) {
+            const radiusGroup = $('#group-Radius');
+            let radiusField = $('#Radius');
+
+            if (radiusField.prop('tagName') === 'INPUT') {
+                radiusField.replaceWith(`<select id="Radius" name="ToolAttribute.Radius" class="form-select"></select>`);
+                radiusField = $('#Radius');
+            }
+
+            radiusField.empty().append('<option value="">اختر القيمة</option>');
+            options.forEach(opt => radiusField.append(`<option value="${opt}">${opt}</option>`));
+
+            radiusGroup.show();
+            radiusField.prop('required', true);
+        }
+
+        function handleSubCategory() {
+            const selectedCode = $('#Item_SubCategoryID option:selected').data('code');
+            resetFields();
+
+            switch (selectedCode) {
+                case 'E':
+                    showGroup('Diameter', true);
+                    showGroup('Radius');
+                    showGroup('Length', true);
+                    showGroup('Hardness', true);
+                    showGroup('Source', true);
+                    break;
+
+                case 'B':
+                case 'D':
+                    showGroup('Diameter', true);
+                    showGroup('Length', true);
+                    showGroup('Hardness', true);
+                    showGroup('Source', true);
+                    break;
+
+                case 'M':
+                    showGroup('Diameter', true);
+                    showGroup('Pitch', true);
+                    showGroup('Length', true);
+                    showGroup('Source', true);
+                    break;
+
+                case 'R':
+                    setMaterialOptions(['Carbide', 'HSS']);
+                    showGroup('Radius', true);
+                    showGroup('Source', true);
+                    break;
+
+                case 'I':
+                    setRadiusOptions([2, 3.5, 5]);
+                    showGroup('Source', true);
+                    break;
+
+                case 'S':
+                    showGroup('Diameter', true);
+                    setRadiusOptions([2, 3.5, 5]);
+                    showGroup('Source', true);
+                    const diameterVal = parseFloat($('#Diameter').val());
+                    if (diameterVal === 15) {
+                        showGroup('Length', true);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        function populateSubCategories(categoryId, selectedSubId = null) {
+            const subCategorySelect = $('#Item_SubCategoryID');
+            subCategorySelect.empty().append('<option value="">-- اختر تصنيف فرعي --</option>');
+
+            const filtered = allSubCategories.filter(sub => sub.categoryID === parseInt(categoryId));
+            filtered.forEach(sub => {
+                subCategorySelect.append(`<option value="${sub.subCategoryID}" data-code="${sub.subCategoryCode}">${sub.subCategoryName}</option>`);
+            });
+
+            if (selectedSubId) {
+                subCategorySelect.val(selectedSubId);
+                handleSubCategory(); // <=== ضروري هنا
+            }
+        }
+
+        $(document).ready(function () {
+            // تغيير التصنيف الرئيسي
+            $('#CategoryID').on('change', function () {
+                const selectedCategoryId = $(this).val();
+                populateSubCategories(selectedCategoryId);
+                $('#Item_SubCategoryID').val('');
+                resetFields();
+            });
+
+            // تغيير التصنيف الفرعي
+            $('#Item_SubCategoryID').on('change', function () {
+                handleSubCategory();
+            });
+
+            // قطر = 15 → إظهار الطول (في حالة Shells)
+            $('#Diameter').on('input', function () {
+                const diameter = parseFloat($(this).val());
+                const selectedCode = $('#Item_SubCategoryID option:selected').data('code');
+
+                if (selectedCode === 'S' && diameter === 15) {
+                    showGroup('Length', true);
+                } else if (selectedCode === 'S') {
+                    hideGroup('Length');
+                }
+            });
+
+            // عند تحميل الصفحة
+            const preselectedCategoryId = $('#CategoryID').val();
+            const selectedSub = '@Model.Item?.SubCategoryID';
+
+            if (preselectedCategoryId) {
+                populateSubCategories(preselectedCategoryId, selectedSub);
+            } else {
+                resetFields();
+            }
+        });
+    </script>
+}
+
+
