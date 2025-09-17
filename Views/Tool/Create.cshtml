@@ -1,33 +1,165 @@
-﻿@model WarehouseApp.Models.Item
+﻿@model WarehouseApp.Models.ToolCreateViewModel
 
 @{
     ViewData["Title"] = "إضافة أداة جديدة";
 }
 
-<h2>إضافة أداة جديدة</h2>
+<h2 class="mb-4">➕ إضافة أداة جديدة</h2>
 
 <form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="ItemCode" class="control-label">كود الأداة</label>
-        <input asp-for="ItemCode" class="form-control" />
-        <span asp-validation-for="ItemCode" class="text-danger"></span>
+    <div class="row">
+
+        <!-- الاسم -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="ItemName" class="form-label">اسم الأداة</label>
+            <input asp-for="ItemName" class="form-control" />
+        </div>
+
+        <!-- الوصف -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="Description" class="form-label">الوصف</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+
+        <!-- التصنيف الرئيسي -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="CategoryID" class="form-label">التصنيف الرئيسي</label>
+            <select asp-for="CategoryID" class="form-control"
+                    asp-items="@(new SelectList(Model.Categories, "CategoryID", "CategoryName"))">
+                <option value="">اختر التصنيف</option>
+            </select>
+        </div>
+
+        <!-- التصنيف الفرعي -->
+        <div class="col-md-6 mb-3">
+            <label asp-for="SubCategoryID" class="form-label">التصنيف الفرعي</label>
+            <select asp-for="SubCategoryID" class="form-control"
+                    asp-items="@(new SelectList(Model.SubCategories, "SubCategoryID", "SubCategoryName"))">
+                <option value="">اختر الفرعي</option>
+            </select>
+        </div>
+
+        <!-- الوحدة -->
+        <div class="col-md-4 mb-3">
+            <label asp-for="Unit" class="form-label">الوحدة</label>
+            <input asp-for="Unit" class="form-control" />
+        </div>
+
+        <!-- حد إعادة الطلب -->
+        <div class="col-md-4 mb-3">
+            <label asp-for="ReorderLevel" class="form-label">حد إعادة الطلب</label>
+            <input asp-for="ReorderLevel" class="form-control" type="number" />
+        </div>
+
+        <!-- الكمية الحالية -->
+        <div class="col-md-4 mb-3">
+            <label asp-for="CurrentStock" class="form-label">الكمية الحالية</label>
+            <input asp-for="CurrentStock" class="form-control" type="number" />
+        </div>
+
+        <hr class="mt-4 mb-2" />
+        <h5 class="mb-3">🔧 خصائص الأداة (Tool Attributes)</h5>
+
+        <!-- القطر -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Diameter" class="form-label">القطر (Φ)</label>
+            <input asp-for="Diameter" class="form-control" />
+        </div>
+
+        <!-- نصف القطر -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Radius" class="form-label">نصف القطر (R)</label>
+            <input asp-for="Radius" class="form-control" />
+        </div>
+
+        <!-- الطول -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Length" class="form-label">الطول (L)</label>
+            <input asp-for="Length" class="form-control" />
+        </div>
+
+        <!-- الصلابة -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Hardness" class="form-label">الصلابة (H)</label>
+            <input asp-for="Hardness" class="form-control" />
+        </div>
+
+        <!-- الخطوة -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Pitch" class="form-label">الخطوة (P)</label>
+            <input asp-for="Pitch" class="form-control" />
+        </div>
+
+        <!-- نوع المادة -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Material" class="form-label">نوع المادة</label>
+            <input asp-for="Material" class="form-control" />
+        </div>
+
+        <!-- المصدر -->
+        <div class="col-md-3 mb-3">
+            <label asp-for="Source" class="form-label">المصدر</label>
+            <select asp-for="Source" class="form-control">
+                <option value="">اختر</option>
+                <option value="I">محلي</option>
+                <option value="O">مستورد</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label>الباركود التلقائي</label>
+        <input type="text" id="GeneratedBarCode" class="form-control" readonly />
     </div>
 
-    <div class="form-group">
-        <label asp-for="ItemName" class="control-label">اسم الأداة</label>
-        <input asp-for="ItemName" class="form-control" />
-        <span asp-validation-for="ItemName" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label asp-for="CategoryID" class="control-label">رقم التصنيف</label>
-        <input asp-for="CategoryID" class="form-control" />
-        <span asp-validation-for="CategoryID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-success">💾 حفظ</button>
-        <a asp-action="Index" class="btn btn-secondary">🔙 رجوع للقائمة</a>
-        <a asp-controller="Items" asp-action="Import" class="btn btn-info">📥 استيراد من ملف</a>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">✔ حفظ الأداة</button>
+        <a asp-action="Index" class="btn btn-secondary">↩ رجوع</a>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#CategoryID').change(function () {
+                var categoryId = $(this).val();
+
+                $('#SubCategoryID').empty();
+
+                if (categoryId) {
+                    $.get('/Tool/GetSubCategories?categoryId=' + categoryId, function (data) {
+                        $('#SubCategoryID').append('<option value="">اختر التصنيف الفرعي</option>');
+                        $.each(data, function (index, item) {
+                            $('#SubCategoryID').append('<option value="' + item.subCategoryID + '">' + item.subCategoryName + '</option>');
+                        });
+                    });
+                } else {
+                    $('#SubCategoryID').append('<option value="">اختر التصنيف الفرعي</option>');
+                }
+            });
+
+            // Barcode generation
+            $('#Diameter, #Radius, #Length, #Hardness, #Source').on('input change', function () {
+                generateBarcode();
+            });
+
+            function generateBarcode() {
+                var diameter = $('#Diameter').val();
+                var radius = $('#Radius').val();
+                var length = $('#Length').val();
+                var hardness = $('#Hardness').val();
+                var source = $('#Source').val();
+
+                var code = "E";
+                if (diameter) code += diameter;
+                if (radius) code += "R" + radius;
+                if (length) code += "L" + length;
+                if (hardness) code += "H" + hardness;
+                if (source) code += source;
+
+                $('#GeneratedBarCode').val(code);
+            }
+        });
+    </script>
+}

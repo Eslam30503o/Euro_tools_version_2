@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WarehouseApp.Models;
 
 namespace WarehouseApp.Models
 {
@@ -34,17 +35,16 @@ namespace WarehouseApp.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
         public string? BarCode1 { get; set; }
-        [Required(ErrorMessage = "يجب تحديد النوع")]
+        
+        //[Required(ErrorMessage = "يجب تحديد النوع")]
         public string? Type { get; set; }
 
-<<<<<<< Updated upstream
-=======
-        [Required(ErrorMessage = "يجب تحديد الصنف")]
+        //[Required(ErrorMessage = "يجب تحديد الصنف")]
         public int? SubCategoryID { get; set; }
+        
         [ForeignKey("SubCategoryID")]
         public SubCategory? SubCategory { get; set; }
 
->>>>>>> Stashed changes
         // علاقات
         public Category? Category { get; set; }
         public ToolAttribute? ToolAttribute { get; set; }

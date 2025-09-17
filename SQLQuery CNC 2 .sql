@@ -508,7 +508,25 @@ UPDATE SubCategories SET SubCategoryCode = 'S' WHERE SubCategoryName LIKE '%Shel
 SELECT * 
 FROM INFORMATION_SCHEMA.COLUMNS 
 WHERE TABLE_NAME = 'SubCategories' AND COLUMN_NAME = 'SubCategoryCode';
+<<<<<<< Updated upstream
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 
 
 ALTER TABLE Items
 ADD Type NVARCHAR(50) NULL;
+<<<<<<< Updated upstream
+=======
+>>>>>>> 7b7fe8a9359d678567045f0e488e7e16650e19bb
+=======
+>>>>>>> Stashed changes
+
+
+
+
+
+
+
+
+ALTER TABLE Transactions ADD RecipientName NVARCHAR(100) ;

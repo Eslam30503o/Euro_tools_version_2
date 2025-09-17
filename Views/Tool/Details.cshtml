@@ -1,34 +1,92 @@
 ﻿@model WarehouseApp.Models.Item
+
 @{
     ViewData["Title"] = "تفاصيل الأداة";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="mb-4 text-center">@ViewData["Title"]</h2>
 
-<div>
+<div class="card shadow-sm p-4">
     <dl class="row">
-        <dt class="col-sm-2">كود الأداة</dt>
-        <dd class="col-sm-10">@Model.ItemCode</dd>
 
-        <dt class="col-sm-2">اسم الأداة</dt>
-        <dd class="col-sm-10">@Model.ItemName</dd>
+        <dt class="col-sm-3 text-end fw-bold">كود الأداة:</dt>
+        <dd class="col-sm-9">@Model.ItemCode</dd>
 
-        <dt class="col-sm-2">الوصف</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
+        <dt class="col-sm-3 text-end fw-bold">اسم الأداة:</dt>
+        <dd class="col-sm-9">@Model.ItemName</dd>
 
-        <dt class="col-sm-2">التصنيف</dt>
-        <dd class="col-sm-10">@Model.Category?.CategoryName</dd>
+        <dt class="col-sm-3 text-end fw-bold">الوصف:</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
 
-        <dt class="col-sm-2">الوحدة</dt>
-        <dd class="col-sm-10">@Model.Unit</dd>
+        <dt class="col-sm-3 text-end fw-bold">التصنيف:</dt>
+        <dd class="col-sm-9">@Model.Category?.CategoryName</dd>
 
-        <dt class="col-sm-2">المخزون الحالي</dt>
-        <dd class="col-sm-10">@Model.CurrentStock</dd>
+        <dt class="col-sm-3 text-end fw-bold">الوحدة:</dt>
+        <dd class="col-sm-9">@Model.Unit</dd>
 
-        <dt class="col-sm-2">تاريخ الإضافة</dt>
-        <dd class="col-sm-10">@Model.CreatedAt</dd>
+        <dt class="col-sm-3 text-end fw-bold">المخزون الحالي:</dt>
+        <dd class="col-sm-9">@Model.CurrentStock</dd>
+
+        <dt class="col-sm-3 text-end fw-bold">تاريخ الإضافة:</dt>
+        <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy/MM/dd")</dd>
+
     </dl>
+
+    @* Tool Attributes (لو موجودة) *@
+    @if (Model.ToolAttribute != null)
+    {
+    <hr />
+    <h4 class="mb-3">⚙️ خصائص الأداة</h4>
+    <dl class="row">
+
+        @if (!string.IsNullOrWhiteSpace(Model.ToolAttribute.Material))
+            {
+        <dt class="col-sm-3 text-end fw-bold">الخامة:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Material</dd>
+            }
+
+        @if (!string.IsNullOrWhiteSpace(Model.ToolAttribute.Source))
+            {
+        <dt class="col-sm-3 text-end fw-bold">المصدر:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Source</dd>
+            }
+
+        @if (Model.ToolAttribute.Length != null)
+            {
+        <dt class="col-sm-3 text-end fw-bold">الطول:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Length</dd>
+            }
+
+        @if (Model.ToolAttribute.Diameter != null)
+            {
+        <dt class="col-sm-3 text-end fw-bold">القطر:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Diameter</dd>
+            }
+
+        @if (Model.ToolAttribute.Radius != null)
+            {
+        <dt class="col-sm-3 text-end fw-bold">نصف القطر:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Radius</dd>
+            }
+
+        @if (Model.ToolAttribute.Hardness != null)
+            {
+        <dt class="col-sm-3 text-end fw-bold">الصلابة:</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Hardness</dd>
+            }
+
+        @if (Model.ToolAttribute.Pitch != null)
+            {
+        <dt class="col-sm-3 text-end fw-bold">السن (Pitch):</dt>
+        <dd class="col-sm-9">@Model.ToolAttribute.Pitch</dd>
+            }
+
+    </dl>
+    }
+
 </div>
 
-<a asp-action="Edit" asp-route-id="@Model.ItemID" class="btn btn-primary">تعديل</a>
-<a asp-action="Index" class="btn btn-secondary">رجوع</a>
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.ItemID" class="btn btn-primary me-2">✏️ تعديل</a>
+    <a asp-action="Index" class="btn btn-secondary">↩️ رجوع</a>
+</div>

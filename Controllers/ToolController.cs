@@ -17,6 +17,16 @@ namespace WarehouseApp.Controllers
         {
             _context = context;
         }
+        [HttpGet]
+        public JsonResult GetSubCategories(int categoryId)
+        {
+            var subCategories = _context.SubCategories
+                .Where(sc => sc.CategoryID == categoryId)
+                .Select(sc => new { sc.SubCategoryID, sc.SubCategoryName })
+                .ToList();
+
+            return Json(subCategories);
+        }
 
         // GET: Tools
         public async Task<IActionResult> Index()
@@ -46,22 +56,61 @@ namespace WarehouseApp.Controllers
         // GET: Tools/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new ToolCreateViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList()
+            };
+            return View(model);
         }
+
 
         // POST: Tools/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Item item)
+        public async Task<IActionResult> Create(ToolCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                model.Categories = _context.Categories.ToList();
+                model.SubCategories = _context.SubCategories.ToList();
+                return View(model);
             }
-            return View(item);
+
+            // 1. Add item
+            var item = new Item
+            {
+                ItemName = model.ItemName,
+                Description = model.Description,
+                CategoryID = model.CategoryID,
+                SubCategoryID = model.SubCategoryID,
+                Unit = model.Unit,
+                ReorderLevel = model.ReorderLevel,
+                CurrentStock = model.CurrentStock
+            };
+
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
+
+            // 2. Add tool attributes
+            var toolAttr = new ToolAttribute
+            {
+                ItemID = item.ItemID,
+                Diameter = model.Diameter,
+                Radius = model.Radius,
+                Length = model.Length,
+                Hardness = model.Hardness,
+                Pitch = model.Pitch,
+                Material = model.Material,
+                Source = model.Source
+            };
+
+            _context.ToolAttributes.Add(toolAttr);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Tools/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WarehouseApp.Controllers
 {
-    [Authorize(Roles = "Manager,Admin")]
+
     public class AddItemController : Controller
     {
         private readonly WarehouseDbContext _context;
@@ -25,37 +25,82 @@ namespace WarehouseApp.Controllers
         }
 
         // GET: AddItem
+        [HttpGet]
         public IActionResult Index()
         {
-            var categories = _context.Categories.ToList();
-            ViewBag.Categories = categories;
+            var model = new AddItemViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList()
+            };
 
-            return View();
+            return View(model);
+        }
+
+        [HttpGet]
+        public JsonResult GetSubCategories(int categoryId)
+        {
+            var subCategories = _context.SubCategories
+                .Where(s => s.CategoryID == categoryId)
+                .Select(s => new
+                {
+                    subCategoryID = s.SubCategoryID,
+                    subCategoryName = s.SubCategoryName,
+                    subCategoryCode = s.SubCategoryCode // ← أضف الكود هنا
+                })
+                .ToList();
+
+            return Json(subCategories);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var model = new AddItemViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList()
+            };
+            return View(model);
         }
 
         // POST: AddItem
         [HttpPost]
-        public IActionResult Index(Item item)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AddItemViewModel model)
         {
-            if (!ModelState.IsValid)
+            // إزالة الربط الغير مفيد من ModelState (لو لسه مش شغال)
+            ModelState.Remove("Item.ToolAttribute");
+            if (_context.Items.Any(i => i.ItemCode == model.Item.ItemCode))
             {
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(item);
+                ModelState.AddModelError("Item.ItemCode", "هذا الكود مستخدم بالفعل. الرجاء اختيار كود مختلف.");
+                // إعادة تعبئة التصنيفات في حال فشل الحفظ
+                model.Categories = await _context.Categories.ToListAsync();
+                model.SubCategories = await _context.SubCategories.ToListAsync();
+                return View(model);
             }
 
-            try
+
+            if (!ModelState.IsValid)
             {
-                _context.Items.Add(item);
-                _context.SaveChanges();
-                TempData["Success"] = "Item added successfully!";
-                return RedirectToAction("Index");
+                model.Categories = _context.Categories.ToList();
+                model.SubCategories = _context.SubCategories.ToList();
+                return View(model);
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Error saving to database: " + ex.Message);
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(item);
-            }
+
+            // حفظ Item
+            _context.Items.Add(model.Item);
+            await _context.SaveChangesAsync();
+
+            // حفظ ToolAttribute بعد الحصول على ItemID
+            model.ToolAttribute.ItemID = model.Item.ItemID;
+
+            // ✅ لا تضع ToolAttrID يدويًا إطلاقًا
+
+            _context.ToolAttributes.Add(model.ToolAttribute);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "تمت إضافة المنتج بنجاح!";
+            return RedirectToAction("Index", "Items");
         }
 
         // GET: AddItem/Import
@@ -74,6 +119,9 @@ namespace WarehouseApp.Controllers
 
             return View(lowStockItems);
         }
+
+
+
 
         // POST: AddItem/Import (CSV + Excel)
         [HttpPost]

@@ -13,6 +13,10 @@ namespace WarehouseApp.Models
 
         [Required(ErrorMessage = "يجب تحديد نوع العملية")]
         public string Action { get; set; } = string.Empty; // مثلا: "سحب" أو "إضافة"
+        
+        [Required(ErrorMessage = "يجب كتابة اسم المستلم ")]
+        [Display(Name = "اسم المستلم")]
+        public string RecipientName { get; set; }
 
         public string? PerformedBy { get; set; }
 

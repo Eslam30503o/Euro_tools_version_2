@@ -16,12 +16,17 @@ public class TransactionController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string actionType, DateTime? fromDate, DateTime? toDate, string search)
+    public async Task<IActionResult> Index(string actionType, DateTime? fromDate, DateTime? toDate, string search, string recipientName)
     {
         var transactions = _context.Transactions
             .Include(t => t.Item)
             .Include(t => t.User)
             .AsQueryable();
+
+        if (!string.IsNullOrEmpty(recipientName))
+        {
+            transactions = transactions.Where(t => t.RecipientName.Contains(recipientName));
+        }
 
         // 🔍 فلترة حسب نوع العملية
         if (!string.IsNullOrEmpty(actionType))

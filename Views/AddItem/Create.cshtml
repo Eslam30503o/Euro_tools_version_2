@@ -59,7 +59,6 @@
                         </select>
                     </div>
 
-
                     <div class="col-md-4">
                         <label asp-for="Item.ReorderLevel" class="form-label">حد إعادة الطلب</label>
                         <input asp-for="Item.ReorderLevel" type="number" min="0" class="form-control" />
@@ -76,19 +75,15 @@
                         <span asp-validation-for="Item.CategoryID" class="invalid-feedback d-block"></span>
                         <select asp-for="Item.CategoryID" class="form-select" id="CategoryID">
                             <option value="">اختر التصنيف الرئيسي</option>
-                            @foreach (var c in Model.Categories)
-                            {
-                            <option value="@c.CategoryID">@c.CategoryName</option>
-                            }
+                            @foreach (var category in Model.Categories)
+    {
+                            <option value="@category.CategoryID">@category.CategoryName</option>
+    }
                         </select>
+
+
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="Item.SubCategoryID" class="form-label">التصنيف الفرعي <span class="text-danger">*</span></label>
-                        <span asp-validation-for="Item.SubCategoryID" class="invalid-feedback d-block"></span>
-                        <select asp-for="Item.SubCategoryID" class="form-control" id="Item_SubCategoryID">
-                            <option value="">-- اختر تصنيف فرعي --</option>
-                        </select>
-                    </div>
+
                     <div class="col-md-6">
                         <label asp-for="Item.Type" class="form-label">نوع المنتج <span class="text-danger">*</span></label>
                         <span asp-validation-for="Item.Type" class="invalid-feedback d-block"></span>
@@ -103,59 +98,65 @@
                         </select>
                     </div>
 
-                </div>
-
-                <hr class="my-4" />
-
-                <h5 class="mb-3">مواصفات الأداة</h5>
-                <div class="row g-3">
-                    <div class="col-md-4 form-group" id="group-Diameter">
-                        <label for="Diameter" class="form-label">Φ (Diameter)</label>
-                        <input asp-for="ToolAttribute.Diameter" class="form-control" id="Diameter" />
-                        <span asp-validation-for="ToolAttribute.Diameter" class="invalid-feedback d-block"></span>
-                    </div>
-                    <div class="col-md-4 form-group" id="group-Radius">
-                        <label for="Radius" class="form-label">R (Radius)</label>
-                        <input asp-for="ToolAttribute.Radius" class="form-control" id="Radius" />
-                        <span asp-validation-for="ToolAttribute.Radius" class="invalid-feedback d-block"></span>
-                    </div>
-                    <div class="col-md-4 form-group" id="group-Length">
-                        <label for="Length" class="form-label">L (Length)</label>
-                        <input asp-for="ToolAttribute.Length" class="form-control" id="Length" />
-                        <span asp-validation-for="ToolAttribute.Length" class="invalid-feedback d-block"></span>
-                    </div>
-                    <div class="col-md-4 form-group" id="group-Hardness">
-                        <label for="Hardness" class="form-label">H (Hardness)</label>
-                        <input asp-for="ToolAttribute.Hardness" class="form-control" id="Hardness" />
-                        <span asp-validation-for="ToolAttribute.Hardness" class="invalid-feedback d-block"></span>
-                    </div>
-                    <div class="col-md-4 form-group" id="group-Pitch">
-                        <label for="Pitch" class="form-label">Pitch</label>
-                        <input asp-for="ToolAttribute.Pitch" class="form-control" id="Pitch" />
-                        <span asp-validation-for="ToolAttribute.Pitch" class="invalid-feedback d-block"></span>
-                    </div>
-                    <div class="col-md-4 form-group" id="group-Source">
-                        <label for="Source" class="form-label">المصدر (محلي / مستورد) <span class="text-danger">*</span></label>
-                        <select asp-for="ToolAttribute.Source" class="form-select" id="Source">
-                            <option value="">اختر المصدر</option>
-                            <option value="I">محلي</option>
-                            <option value="O">مستورد</option>
+                    <div class="col-md-6">
+                        <label asp-for="Item.SubCategoryID" class="form-label">التصنيف الفرعي <span class="text-danger">*</span></label>
+                        <span asp-validation-for="Item.SubCategoryID" class="invalid-feedback d-block"></span>
+                        <select asp-for="Item.SubCategoryID" class="form-control" id="Item_SubCategoryID">
+                            <option value="">-- اختر تصنيف فرعي --</option>
                         </select>
-                        <span asp-validation-for="ToolAttribute.Source" class="invalid-feedback d-block"></span>
                     </div>
-                    <div class="col-md-4 form-group" id="group-Material">
-                        <label for="Material" class="form-label">المادة</label>
-                        <input asp-for="ToolAttribute.Material" class="form-control" id="Material" />
-                        <span asp-validation-for="ToolAttribute.Material" class="invalid-feedback d-block"></span>
-                    </div>
-                </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">
-                        حفظ المنتج
-                    </button>
-                    <a asp-action="Index" asp-controller="Items" class="btn btn-outline-secondary ms-2">إلغاء</a>
-                </div>
+                    <hr class="my-4" />
+
+                    <h5 class="mb-3">مواصفات الأداة</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4 form-group" id="group-Diameter">
+                            <label for="Diameter" class="form-label">Φ (Diameter)</label>
+                            <input asp-for="ToolAttribute.Diameter" class="form-control" id="Diameter" />
+                            <span asp-validation-for="ToolAttribute.Diameter" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Radius">
+                            <label for="Radius" class="form-label">R (Radius)</label>
+                            <input asp-for="ToolAttribute.Radius" class="form-control" id="Radius" />
+                            <span asp-validation-for="ToolAttribute.Radius" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Length">
+                            <label for="Length" class="form-label">L (Length)</label>
+                            <input asp-for="ToolAttribute.Length" class="form-control" id="Length" />
+                            <span asp-validation-for="ToolAttribute.Length" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Hardness">
+                            <label for="Hardness" class="form-label">H (Hardness)</label>
+                            <input asp-for="ToolAttribute.Hardness" class="form-control" id="Hardness" />
+                            <span asp-validation-for="ToolAttribute.Hardness" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Pitch">
+                            <label for="Pitch" class="form-label">Pitch</label>
+                            <input asp-for="ToolAttribute.Pitch" class="form-control" id="Pitch" />
+                            <span asp-validation-for="ToolAttribute.Pitch" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Source">
+                            <label for="Source" class="form-label">المصدر (محلي / مستورد) <span class="text-danger">*</span></label>
+                            <select asp-for="ToolAttribute.Source" class="form-select" id="Source">
+                                <option value="">اختر المصدر</option>
+                                <option value="I">محلي</option>
+                                <option value="O">مستورد</option>
+                            </select>
+                            <span asp-validation-for="ToolAttribute.Source" class="invalid-feedback d-block"></span>
+                        </div>
+                        <div class="col-md-4 form-group" id="group-Material">
+                            <label for="Material" class="form-label">المادة</label>
+                            <input asp-for="ToolAttribute.Material" class="form-control" id="Material" />
+                            <span asp-validation-for="ToolAttribute.Material" class="invalid-feedback d-block"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            حفظ المنتج
+                        </button>
+                        <a asp-action="Index" asp-controller="Items" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                    </div>
             </form>
         </div>
     </div>

@@ -18,6 +18,17 @@ public class InventoryController : Controller
         _context = context;
     }
 
+    public async Task<IActionResult> ReorderAlerts()
+    {
+        var lowStockItems = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.SubCategory)
+            .Where(i => i.CurrentStock <= i.ReorderLevel)
+            .ToListAsync();
+
+        return View(lowStockItems);
+    }
+
     // هذه الدالة ستتعامل مع كل من الطلبات التي بها بحث والتي بدون بحث
     [HttpGet] // إضافة هذه السمة للتوضيح
     public async Task<IActionResult> Create(string SearchString)
@@ -35,6 +46,7 @@ public class InventoryController : Controller
             items = items.Where(s => s.ItemName.Contains(SearchString)
                                    || s.ItemCode.Contains(SearchString));
         }
+
 
         // جلب البيانات وإعدادها للعرض
         var itemsWithQuantity = await items.Select(i => new
@@ -65,6 +77,7 @@ public class InventoryController : Controller
             return View(model);
         }
 
+
         var item = await _context.Items.FindAsync(model.ItemID);
         if (item == null)
             return NotFound();
@@ -90,6 +103,7 @@ public class InventoryController : Controller
             item.CurrentStock += model.Quantity;
         }
 
+
         // إضافة حركة في جدول Transactions
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null)
@@ -106,7 +120,9 @@ public class InventoryController : Controller
             Action = model.Action,
             QuantityChange = model.Action == "OUT" ? -model.Quantity : model.Quantity,
             Timestamp = DateTime.Now,
-            UserID = userId
+            UserID = userId,
+            RecipientName = model.RecipientName
+
         };
 
 

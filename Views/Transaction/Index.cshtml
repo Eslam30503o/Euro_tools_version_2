@@ -276,6 +276,10 @@
                         <label class="form-label fw-bold">إلى تاريخ</label>
                         <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]" />
                     </div>
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <label class="form-label fw-bold">اسم المستلم</label>
+                        <input type="text" name="recipientName" class="form-control" placeholder="اسم المستلم" value="@Context.Request.Query["recipientName"]" />
+                    </div>
                     <div class="col-lg-4 col-md-12">
                         <label class="form-label">&nbsp;</label>
                         <div class="d-flex gap-2">
@@ -341,6 +345,11 @@
                                 تغيير الكمية
                             </th>
                             <th scope="col">
+                                <i class="fas fa-user-tag me-2"></i>
+                                اسم المستلم
+                            </th>
+
+                            <th scope="col">
                                 <i class="fas fa-clock me-2"></i>
                                 التاريخ والوقت
                             </th>
@@ -389,6 +398,7 @@
                                 <span class="badge bg-secondary">@t.Action</span>
                                     }
                             </td>
+
                             <td class="text-center">
                                 @if (t.Action == "IN")
     {
@@ -408,6 +418,9 @@
     {
                                 <span>@t.QuantityChange</span>
     }
+                            </td>
+                            <td>
+                                @(string.IsNullOrEmpty(t.RecipientName) ? "-" : t.RecipientName)
                             </td>
                             <td>
                                 <div>

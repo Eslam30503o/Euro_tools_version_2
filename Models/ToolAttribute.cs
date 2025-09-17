@@ -1,25 +1,43 @@
-﻿// Models/ToolAttribute.cs
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WarehouseApp.Models
 {
     public class ToolAttribute
     {
-        [Key, ForeignKey("Item")]
-        public int ItemID { get; set; }  // نفس مفتاح الـ Item
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // ✅ تأكيد أن SQL مسؤول عن التوليد
+        [BindNever]
+        public int ToolAttrID { get; set; } // مفتاح أساسي
 
-        public decimal? Diameter { get; set; }     // Φ
-        public decimal? Radius { get; set; }       // R
-        public decimal? Length { get; set; }       // L
-        public decimal? Hardness { get; set; }     // H
-        public decimal? Pitch { get; set; }        // P (Thread)
-        public string MaterialType { get; set; }   // Reamer: مثل Carbide
-        public string LocalOrImported { get; set; }  // I or O
+        [Required]
+        public int ItemID { get; set; } // مفتاح خارجي
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Diameter { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Radius { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Length { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Hardness { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Pitch { get; set; }
+
+        
+        public string? Source { get; set; }
+
+        
+        public string? Material { get; set; }
 
         //public string? Type { get; set; }
 
         // Navigation property
-        public Item Item { get; set; }
+        public Item? Item { get; set; }
     }
 }

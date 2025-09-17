@@ -1,16 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Controllers",
-    "\\Data",
-    "\\Views",
-    "\\Views\\Login",
-    "\\Views\\Shared"
+    ""
   ],
-<<<<<<< Updated upstream
-  "SelectedNode": "\\Views\\Shared\\_Layout.cshtml",
-=======
-  "SelectedNode": "\\Models\\User.cs",
->>>>>>> Stashed changes
   "PreviewInSolutionExplorer": false
 }

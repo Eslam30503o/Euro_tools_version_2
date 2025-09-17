@@ -155,59 +155,59 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr data-item-id="@item.ItemCode">
-                                <td>
-                                    <span class="badge bg-secondary fs-6">@item.ItemCode</span>
-                                </td>
-                                <td>
-                                    <strong>@item.ItemName</strong>
-                                </td>
-                                <td>
-                                    <span class="text-muted">
-                                        @(string.IsNullOrEmpty(item.Description) ? "No description" :
+<tr data-item-id="@item.ItemCode" data-category="@item.Category?.CategoryName">
+    <td>
+        <span class="badge bg-secondary fs-6">@item.ItemCode</span>
+    </td>
+    <td>
+        <strong>@item.ItemName</strong>
+    </td>
+    <td>
+        <span class="text-muted">
+            @(string.IsNullOrEmpty(item.Description) ? "No description" :
                                                 (item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description))
-                                    </span>
-                                </td>
-                                <td>
-                                    @if (item.Category != null)
+        </span>
+    </td>
+    <td>
+        @if (item.Category != null)
                                         {
-                                    <span class="badge bg-primary">@item.Category.CategoryName</span>
+        <span class="badge bg-primary">@item.Category.CategoryName</span>
                                         }
                                         else
                                         {
-                                    <span class="badge bg-light text-dark">Uncategorized</span>
+        <span class="badge bg-light text-dark">Uncategorized</span>
                                         }
-                                </td>
-                                <td>
-                                    @{
+    </td>
+    <td>
+        @{
                                             var stockClass = item.CurrentStock < 10 ? "bg-danger" :
                                                                 item.CurrentStock < 50 ? "bg-warning" : "bg-success";
-                                    }
-                                    <span class="badge @stockClass fs-6">
-                                        @item.CurrentStock
-                                        @if (item.CurrentStock < 10)
+        }
+        <span class="badge @stockClass fs-6">
+            @item.CurrentStock
+            @if (item.CurrentStock < 10)
                                             {
-                                        <i class="fas fa-exclamation-triangle ms-1"></i>
+            <i class="fas fa-exclamation-triangle ms-1"></i>
                                             }
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-info"
-                                                onclick="viewItem('@item.ItemCode')" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-primary"
-                                                onclick="editItem('@item.ItemCode')" title="Edit Item">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger"
-                                                onclick="deleteItem('@item.ItemCode')" title="Delete Item">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+        </span>
+    </td>
+    <td class="text-center">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-outline-info"
+                    onclick="viewItem('@item.ItemID')" title="View Details">
+                <i class="fas fa-eye"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-primary"
+                    onclick="editItem('@item.ItemID')" title="Edit Item">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger"
+                    onclick="deleteItem('@item.ItemID')" title="Delete Item">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </td>
+</tr>
                             }
                         </tbody>
                     </table>
@@ -385,11 +385,15 @@
                 const row = rows[i];
                 const code = row.cells[0].textContent.toLowerCase();
                 const name = row.cells[1].textContent.toLowerCase();
-                const category = row.cells[3].textContent;
+                const category = row.getAttribute('data-category') || '';
                 const stockText = row.cells[4].textContent.match(/\d+/);
                 const stock = stockText ? parseInt(stockText[0]) : 0;
 
                 let showRow = true;
+
+                if (categoryFilter && category !== categoryFilter) {
+                    showRow = false;
+                }
 
                 // Search filter
                 if (searchTerm && !code.includes(searchTerm) && !name.includes(searchTerm)) {
@@ -495,21 +499,21 @@
         }
 
         // Action functions
-        function viewItem(itemCode) {
+        function viewItem(id) {
             // Add your view logic here
-            window.location.href = `/Items/Details/${itemCode}`;
+            window.location.href = `/Tool/Details/${id}`;
         }
 
-        function editItem(itemCode) {
+        function editItem(id) {
             // Add your edit logic here
-            window.location.href = `/Items/Edit/${itemCode}`;
+            window.location.href = `/Tool/Edit/${id}`;
         }
 
-        function deleteItem(itemCode) {
+        function deleteItem(id) {
             if (confirm('Are you sure you want to delete this item?')) {
                 // Add your delete logic here
                 // Example: Call API to delete
-                fetch(`/Items/Delete/${itemCode}`, {
+                fetch(`/Tool/Delete/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -518,7 +522,7 @@
                     .then(response => {
                         if (response.ok) {
                             // Remove row from table
-                            const row = document.querySelector(`tr[data-item-id="${itemCode}"]`);
+                            const row = document.querySelector(`tr[data-item-id="${id}"]`);
                             if (row) {
                                 row.remove();
                             }

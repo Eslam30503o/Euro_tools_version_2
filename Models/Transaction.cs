@@ -23,6 +23,8 @@ namespace WarehouseApp.Models
 
         public DateTime Timestamp { get; set; } = DateTime.Now;
 
+        public string? RecipientName { get; set; }
+
         // Navigation properties
         public Item Item { get; set; }
         public User User { get; set; }
